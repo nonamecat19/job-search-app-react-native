@@ -20,17 +20,17 @@ const VacancySchema = new Schema({
         type: String,
         trim: true
     },
-    salary: {
+    minSalary: {
+        type: Number
+    },
+    maxSalary: {
         type: Number
     },
     experience: {
         type: Number
     },
     requirements: {
-        type: [{
-            requirement: String,
-            value: String
-        }]
+        type: [String]
     },
     offers: {
         type: [String]
@@ -40,16 +40,21 @@ const VacancySchema = new Schema({
         required: true
     },
     categories: {
-        type: Schema.Types.ObjectId,
+        type: [Schema.Types.ObjectId],
         ref: CategoryModel
     },
     employmentTypes: {
-        type: Schema.Types.ObjectId,
+        type: [Schema.Types.ObjectId],
         ref: EmploymentTypeModel
     },
     tags: {
-        type: Schema.Types.ObjectId,
+        type: [Schema.Types.ObjectId],
         ref: TagModel
+    },
+    available: {
+        type: Boolean,
+        required: true,
+        default: true
     }
 })
 

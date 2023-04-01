@@ -4,6 +4,16 @@ const express = require("express")
 
 const router = express.Router()
 
+router.get("/", async (req, res) => {
+    try {
+        const users = await Company.find({})
+        res.status(200).send(users)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
+
+
 router.post("/", async (req, res) => {
     if (!req.body) {
         res.status(400).send()
