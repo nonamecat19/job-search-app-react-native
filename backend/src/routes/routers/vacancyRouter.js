@@ -14,27 +14,27 @@ router.get("/", async (req, res) => {
 
 router.get("/search", async (req, res) => {
     try {
-        const filter = req.query
-        const newFilter = {}
+        const query = req.query
+        const filter = {}
 
-        if (filter.minSalary) {
-            newFilter.minSalary = {
-                $lte: filter.minSalary
+        if (query.minSalary) {
+            filter.minSalary = {
+                $lte: query.minSalary
             }
         }
-        if (filter.experience) {
-            newFilter.experience = {
-                $lte: filter.experience
+        if (query.experience) {
+            filter.experience = {
+                $lte: query.experience
             }
         }
-        if (filter.query) {
-            newFilter.title = {
-                $regex: filter.query,
+        if (query.query) {
+            filter.title = {
+                $regex: query.query,
                 $options: 'i'
             }
         }
 
-        const vacancies = await Vacancy.find(newFilter)
+        const vacancies = await Vacancy.find(filter)
         res.status(200).send(vacancies)
     } catch (error) {
         res.status(500).send(error)
