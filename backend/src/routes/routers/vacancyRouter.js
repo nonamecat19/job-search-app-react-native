@@ -1,12 +1,19 @@
 const Vacancy = require("../../models/vacancy")
 const express = require("express")
+const Company = require("../../models/company");
 
 const router = express.Router()
 
 router.get("/", async (req, res) => {
     try {
-        const vacancies = await Vacancy.find({})
-        res.status(200).send(vacancies)
+        const vacancies = await Vacancy
+            .find({})
+            .populate({
+                path: 'company',
+                select: 'name'
+            })
+            .populate('categories employmentTypes tags')
+        res.status(200).json(vacancies)
     } catch (error) {
         res.status(500).send(error)
     }
@@ -19,7 +26,7 @@ router.get("/search", async (req, res) => {
 
         if (query.minSalary) {
             filter.minSalary = {
-                $lte: query.minSalary
+                $gte: query.minSalary
             }
         }
         if (query.experience) {
@@ -34,7 +41,13 @@ router.get("/search", async (req, res) => {
             }
         }
 
-        const vacancies = await Vacancy.find(filter)
+        const vacancies = await Vacancy
+            .find(filter)
+            .populate({
+                path: 'company',
+                select: 'name'
+            })
+            .populate('categories employmentTypes tags')
         res.status(200).send(vacancies)
     } catch (error) {
         res.status(500).send(error)
@@ -53,6 +66,9 @@ router.post("/", async (req, res) => {
     const newVacancy = new Vacancy(vacancyData)
 
     try {
+        const company = await Company.findById(vacancyData.company)
+        company.vacancies.push(newVacancy._id)
+        await company.save()
         await newVacancy.save()
         res.status(200).send(newVacancy)
     } catch (error) {
