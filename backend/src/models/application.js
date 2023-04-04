@@ -1,11 +1,16 @@
 const {Schema, model} = require("mongoose")
-const {ApplicationModel, ResumeModel, VacancyModel, WorkerModel} = require("../constansts/models")
+const {ApplicationModel, ResumeModel, VacancyModel, WorkerModel, CompanyModel} = require("../constansts/models")
 
 const ApplicationSchema = new Schema({
     vacancy: {
         type: Schema.Types.ObjectId,
         ref: VacancyModel,
         required: true,
+    },
+    company: {
+        type: Schema.Types.ObjectId,
+        ref: CompanyModel,
+        required: true
     },
     worker: {
         type: Schema.Types.ObjectId,

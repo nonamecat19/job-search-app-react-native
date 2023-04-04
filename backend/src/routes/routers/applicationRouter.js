@@ -1,6 +1,6 @@
 const Application = require("../../models/application")
+const Vacancy = require("../../models/vacancy")
 const express = require("express")
-const {application} = require("express");
 
 const router = express.Router()
 
@@ -26,6 +26,8 @@ router.post("/", async (req, res) => {
     const newApplication = new Application(applicationData)
 
     try {
+        const vacancy = await Vacancy.findById(newApplication.vacancy)
+        newApplication.company = vacancy._id
         await newApplication.save()
         res.status(200).send(newApplication)
     } catch (error) {
