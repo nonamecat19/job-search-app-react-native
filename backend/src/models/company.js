@@ -11,6 +11,9 @@ const CompanySchema = new Schema({
         type: String,
         trim: true,
     },
+    icon: {
+        type: String
+    },
     vacancies: {
         type: [Schema.Types.ObjectId],
         ref: VacancyModel
