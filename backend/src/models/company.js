@@ -20,6 +20,14 @@ const CompanySchema = new Schema({
     }
 })
 
+CompanySchema.set('toJSON', {
+    virtuals: true,
+    versionKey:false,
+    transform: (doc, ret) => {
+        delete ret._id
+    }
+})
+
 const Company = new model(CompanyModel, CompanySchema)
 
 module.exports = Company

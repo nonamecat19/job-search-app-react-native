@@ -8,6 +8,14 @@ const AdminSchema = new Schema({
     }
 })
 
+AdminSchema.set('toJSON', {
+    virtuals: true,
+    versionKey:false,
+    transform: (doc, ret) => {
+        delete ret._id
+    }
+})
+
 const Admin = new model(AdminModel, AdminSchema)
 
 module.exports = Admin

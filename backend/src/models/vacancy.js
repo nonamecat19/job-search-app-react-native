@@ -58,6 +58,14 @@ const VacancySchema = new Schema({
     }
 })
 
+VacancySchema.set('toJSON', {
+    virtuals: true,
+    versionKey:false,
+    transform: (doc, ret) => {
+        delete ret._id
+    }
+})
+
 const Vacancy = new model(VacancyModel, VacancySchema)
 
 module.exports = Vacancy

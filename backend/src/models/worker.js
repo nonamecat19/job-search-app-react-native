@@ -24,6 +24,14 @@ const WorkerSchema = new Schema({
     }
 })
 
+WorkerSchema.set('toJSON', {
+    virtuals: true,
+    versionKey:false,
+    transform: (doc, ret) => {
+        delete ret._id
+    }
+})
+
 const Worker = new model(WorkerModel, WorkerSchema)
 
 module.exports = Worker

@@ -32,6 +32,14 @@ const ApplicationSchema = new Schema({
     }
 })
 
+ApplicationSchema.set('toJSON', {
+    virtuals: true,
+    versionKey:false,
+    transform: (doc, ret) => {
+        delete ret._id
+    }
+})
+
 const Application = new model(ApplicationModel, ApplicationSchema)
 
 module.exports = Application

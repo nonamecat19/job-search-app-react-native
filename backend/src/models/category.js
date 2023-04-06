@@ -8,6 +8,14 @@ const CategorySchema = new Schema({
     }
 })
 
+CategorySchema.set('toJSON', {
+    virtuals: true,
+    versionKey:false,
+    transform: (doc, ret) => {
+        delete ret._id
+    }
+})
+
 const Category = new model(CategoryModel, CategorySchema)
 
 module.exports = Category

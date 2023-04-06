@@ -96,6 +96,13 @@ UserSchema.methods.generateAuthToken = async function() {
     return token
 }
 
+UserSchema.set('toJSON', {
+    virtuals: true,
+    versionKey:false,
+    transform: (doc, ret) => {
+        delete ret._id
+    }
+})
 
 const User = model(UserModel, UserSchema)
 

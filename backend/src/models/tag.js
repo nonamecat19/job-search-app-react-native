@@ -8,6 +8,14 @@ const TagSchema = new Schema({
     }
 })
 
+TagSchema.set('toJSON', {
+    virtuals: true,
+    versionKey:false,
+    transform: (doc, ret) => {
+        delete ret._id
+    }
+})
+
 const Tag = new model(TagModel, TagSchema)
 
 module.exports = Tag

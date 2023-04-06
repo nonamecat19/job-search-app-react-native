@@ -12,6 +12,14 @@ const ResumeSchema = new Schema({
     }
 })
 
+ResumeSchema.set('toJSON', {
+    virtuals: true,
+    versionKey:false,
+    transform: (doc, ret) => {
+        delete ret._id
+    }
+})
+
 const Resume = new model(ResumeModel, ResumeSchema)
 
 module.exports = Resume

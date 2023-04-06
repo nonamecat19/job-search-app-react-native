@@ -8,6 +8,14 @@ const EmploymentTypeSchema = new Schema({
     }
 })
 
+EmploymentTypeSchema.set('toJSON', {
+    virtuals: true,
+    versionKey:false,
+    transform: (doc, ret) => {
+        delete ret._id
+    }
+})
+
 const EmploymentType = new model(EmploymentTypeModel, EmploymentTypeSchema)
 
 module.exports = EmploymentType

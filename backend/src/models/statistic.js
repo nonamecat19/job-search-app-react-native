@@ -42,6 +42,14 @@ const StatisticSchema = new Schema({
     },
 })
 
-const Statistic = new mongoose.model(StatisticModel, StatisticSchema)
+StatisticSchema.set('toJSON', {
+    virtuals: true,
+    versionKey:false,
+    transform: (doc, ret) => {
+        delete ret._id
+    }
+})
+
+const Statistic = new model(StatisticModel, StatisticSchema)
 
 module.exports = Statistic
