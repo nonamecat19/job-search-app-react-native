@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import React, { useState } from "react";
+import { SafeAreaView, ScrollView, View, Text} from "react-native";
 import { Stack, useRouter } from "expo-router";
+import Vacancies from '../mock/vacancies.json'
 
 import { COLORS, icons, images, SIZES } from "../constants";
 import {
@@ -13,6 +14,7 @@ import {
 const Home = () => {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("");
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
@@ -46,9 +48,10 @@ const Home = () => {
               }
             }}
           />
-
           <Popularjobs />
-          <Nearbyjobs />
+          {/*<Nearbyjobs />*/}
+
+        {/*    TODO:категорії*/}
         </View>
       </ScrollView>
     </SafeAreaView>

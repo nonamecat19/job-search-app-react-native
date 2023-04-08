@@ -19,6 +19,22 @@ router.get("/", async (req, res) => {
     }
 })
 
+router.get("/:id", async (req, res) => {
+    try {
+        const vacancy = await Vacancy
+            .findById(req.params.id)
+            .populate({
+                path: 'company',
+                select: 'name'
+            })
+            .populate('categories employmentTypes tags')
+        res.status(200).json(vacancy)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
+
+
 router.get("/search", async (req, res) => {
     try {
         const query = req.query

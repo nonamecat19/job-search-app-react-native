@@ -1,22 +1,23 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import {RequestMethod, RequestPath} from "../types/request";
 
-const useFetch = (endpoint, query) => {
+
+const useFetch = (method: RequestMethod, path: RequestPath) => {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const endPoint = endpoint
-
   const options = {
-    method: "GET",
-    // url: `https://jsearch.p.rapidapi.com/${endpoint}`,
-    url: `https://jsearch.p.rapidapi.com/search`,
-    headers: {
-      "X-RapidAPI-Key": 'b10428f313msh3ebc9da1d3b5e2cp1f92b2jsn48e26f266e19',
-      "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
-    },
-    params: { ...query },
+    method: method,
+    url: `https://thankful-yoke-crow.cyclic.app/${path}`,
+    // method: 'GET',
+
+    // headers: {
+    //   "X-RapidAPI-Key": 'b10428f313msh3ebc9da1d3b5e2cp1f92b2jsn48e26f266e19',
+    //   "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
+    // },
+    // params: { ...query },
   };
 
   const fetchData = async () => {
@@ -25,7 +26,8 @@ const useFetch = (endpoint, query) => {
     try {
       const response = await axios.request(options)
 
-      setData(response.data.data)
+      console.log(response.data)
+      setData(response.data)
       setIsLoading(false)
     } catch (error) {
       setError(error)

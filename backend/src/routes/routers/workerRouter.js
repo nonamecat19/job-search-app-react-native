@@ -37,4 +37,18 @@ router.post("/", async (req, res) => {
     }
 })
 
+router.post("/addSave/:worker/:vacancy", async (req, res) => {
+    const worker = await Worker.findById(req.params.worker)
+    if (!worker?.saved?.includes(req.params.vacancy)) {
+        worker.saved.push(req.params.vacancy)
+    }
+    try {
+        worker.save()
+        res.send(worker)
+    } catch (error) {
+        res.status(404).send(error.message)
+    }
+})
+
+
 module.exports = router

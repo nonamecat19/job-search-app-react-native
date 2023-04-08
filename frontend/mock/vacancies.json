@@ -1,0 +1,65 @@
+[
+    {
+      "_id": "64280a6fc3c47f36fd23c6d7",
+      "title": "Front-End Developer",
+      "company": "Google",
+      "description": "Junior React developer",
+      "location": "Київ",
+      "minSalary": 10000,
+      "maxSalary": 20000,
+      "experience": 0,
+      "requirements": [
+        "Досвід роботи з реакт",
+        "Знання TailwindCSS"
+      ],
+      "offers": [
+        "Корпоративи",
+        "Тренаженрий зал"
+      ],
+      "date": "2023-04-01T10:41:51.320Z",
+      "categories": [
+        "IT"
+      ],
+      "employmentTypes": [
+        "Повна"
+      ],
+      "tags": [
+        "Для студентів"
+      ],
+      "available": true,
+      "__v": 0
+    },
+    {
+      "_id": "64298bcebf6e635c8ca0a144",
+      "title": "Back-End Developer",
+      "company": "Amazon",
+      "description": "NodeJS developer",
+      "experience": 0,
+      "requirements": [
+        "Знання NodeJS"
+      ],
+      "offers": [],
+      "date": "2023-04-02T14:06:06.010Z",
+      "categories": [],
+      "employmentTypes": [],
+      "tags": [],
+      "available": true,
+      "__v": 0
+    },
+    {
+      "_id": "64298c0bbf6e635c8ca0a146",
+      "title": "FullStack Developer",
+      "company": "Facebook",
+      "description": "Ми шукаємо NextJS розробника для свого проекту",
+      "requirements": [
+        "Знання NodeJS"
+      ],
+      "offers": [],
+      "date": "2023-04-02T14:07:07.814Z",
+      "categories": [],
+      "employmentTypes": [],
+      "tags": [],
+      "available": true,
+      "__v": 0
+    }
+]

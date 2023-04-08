@@ -1,5 +1,5 @@
 const {Schema, model} = require("mongoose")
-const {ApplicationModel, CategoryModel, EmploymentTypeModel, ResumeModel, TagModel, WorkerModel} = require("../constansts/models")
+const {ApplicationModel, CategoryModel, EmploymentTypeModel, ResumeModel, TagModel, WorkerModel, VacancyModel} = require("../constansts/models")
 
 const WorkerSchema = new Schema({
     resumes: {
@@ -17,6 +17,10 @@ const WorkerSchema = new Schema({
     categories: {
         type: [Schema.Types.ObjectId],
         ref: CategoryModel
+    },
+    saved: {
+        type: [Schema.Types.ObjectId],
+        ref: VacancyModel
     },
     tags: {
         type: [Schema.Types.ObjectId],

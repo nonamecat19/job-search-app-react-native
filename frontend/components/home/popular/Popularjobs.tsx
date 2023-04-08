@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {FC, useState} from "react";
 import { useRouter } from "expo-router";
 import {
   View,
@@ -12,19 +12,26 @@ import styles from "./popularjobs.style";
 import { COLORS, SIZES } from "../../../constants";
 import PopularJobCard from "../../common/cards/popular/PopularJobCard";
 import useFetch from "../../../hook/useFetch";
+import {GET} from "../../../constants/requests";
 
-const Popularjobs = () => {
+const Popularjobs: FC = () => {
   const router = useRouter();
-  const { data, isLoading, error } = useFetch("search", {
-    query: "React developer",
-    num_pages: "1",
-  });
+  // const { data, isLoading, error } = useFetch("search", {
+  //   query: "React developer",
+  //   num_pages: "1",
+  // });
+
+  const isLoading = false
+  const error = false
+  let data: any = useFetch(GET, 'vacancies').data
+
+  // const [data, setData] = useState([])
 
   const [selectedJob, setSelectedJob] = useState();
 
   const handleCardPress = (item) => {
-    router.push(`/job-details/${item.job_id}`);
-    setSelectedJob(item.job_id);
+    router.push(`/job-details/${item.id}`);
+    setSelectedJob(item.id);
   };
 
   return (
@@ -51,7 +58,7 @@ const Popularjobs = () => {
                 handleCardPress={handleCardPress}
               />
             )}
-            keyExtractor={(item) => item.job_id}
+            keyExtractor={(item) => item.id}
             contentContainerStyle={{ columnGap: SIZES.medium }}
             horizontal
           />

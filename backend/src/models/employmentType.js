@@ -4,6 +4,7 @@ const {EmploymentTypeModel} = require("../constansts/models")
 const EmploymentTypeSchema = new Schema({
     name: {
         type: String,
+        unique: true,
         required: true
     }
 })

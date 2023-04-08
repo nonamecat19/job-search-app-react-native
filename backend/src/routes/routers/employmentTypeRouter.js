@@ -13,16 +13,20 @@ router.get("/", async (req, res) => {
 })
 
 router.post("/", async (req, res) => {
-    if (!req.body) {
-        res.status(400).send()
-    }
-
-    let employmentTypeData = req.body
-    const newEmploymentType = new EmploymentType(employmentTypeData)
+    const newEmploymentType = new EmploymentType(req.body)
 
     try {
         await newEmploymentType.save()
         res.status(200).send(newEmploymentType)
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+})
+
+router.delete("/:id", async (req, res) => {
+    try {
+        await EmploymentType.findByIdAndRemove(req.params.id)
+        res.status(200).send()
     } catch (error) {
         res.status(400).send(error.message)
     }

@@ -19,16 +19,15 @@ import {
 } from "../../components";
 import { COLORS, icons, SIZES } from "../../constants";
 import useFetch from "../../hook/useFetch";
-
-const tabs = ["About", "Qualifications", "Responsibilities"];
+import {GET} from "../../constants/requests";
+import {FC} from "react"
+const tabs = ["Про нас", "Ми пропонуємо", "Вимоги"];
 
 const JobDetails = () => {
   const params = useSearchParams();
   const router = useRouter();
 
-  const { data, isLoading, error, refetch } = useFetch("job-details", {
-    job_id: params.id,
-  });
+  const { data, isLoading, error, refetch } = useFetch(GET, `vacancies/${params.id}`);
 
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [refreshing, setRefreshing] = useState(false);
@@ -40,26 +39,26 @@ const JobDetails = () => {
   }, []);
 
 
-  const displayTabContent = () => {
+  const DisplayTabContent = () => {
     switch (activeTab) {
-      case "Qualifications":
+      case "Ми пропонуємо":
         return (
           <Specifics
-            title='Qualifications'
-            points={data[0].job_highlights?.Qualifications ?? ["N/A"]}
+            title='Offers'
+            points={data.offers}
           />
         );
 
-      case "About":
+      case "Про нас":
         return (
-          <JobAbout info={data[0].job_description ?? "No data provided"} />
+          <JobAbout info={data.description ?? "No data provided"} />
         );
 
-      case "Responsibilities":
+      case "Вимоги":
         return (
           <Specifics
-            title='Responsibilities'
-            points={data[0].job_highlights?.Responsibilities ?? ["N/A"]}
+            title='Вимоги'
+            points={data.requirements ?? ["N/A"]}
           />
         );
 
@@ -103,10 +102,10 @@ const JobDetails = () => {
           ) : (
             <View style={{ padding: SIZES.medium, paddingBottom: 100 }}>
               <Company
-                companyLogo={data[0].employer_logo}
-                jobTitle={data[0].job_title}
-                companyName={data[0].employer_name}
-                location={data[0].job_country}
+                companyLogo={''}
+                jobTitle={data.title}
+                companyName={data.company.name}
+                location={data.location ?? 'Віддалено'}
               />
 
               <JobTabs
@@ -115,12 +114,12 @@ const JobDetails = () => {
                 setActiveTab={setActiveTab}
               />
 
-              {displayTabContent()}
+              <DisplayTabContent/>
             </View>
           )}
         </ScrollView>
 
-        <JobFooter url={data[0]?.job_google_link ?? 'https://careers.google.com/jobs/results/'} />
+        <JobFooter url={'' ?? 'https://careers.google.com/jobs/results/'} />
       </>
     </SafeAreaView>
   );
