@@ -38,7 +38,6 @@ const JobDetails = () => {
     setRefreshing(false)
   }, []);
 
-
   const DisplayTabContent = () => {
     switch (activeTab) {
       case "Ми пропонуємо":

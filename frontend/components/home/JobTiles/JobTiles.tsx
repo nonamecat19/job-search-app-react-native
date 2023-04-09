@@ -14,7 +14,12 @@ import PopularJobCard from "../../common/cards/popular/PopularJobCard";
 import useFetch from "../../../hook/useFetch";
 import {GET} from "../../../constants/requests";
 
-const Popularjobs: FC = () => {
+interface Props {
+  data: any[]
+  title: string
+}
+
+const JobTiles: FC<Props> = ({data, title}) => {
   const router = useRouter();
   // const { data, isLoading, error } = useFetch("search", {
   //   query: "React developer",
@@ -23,21 +28,21 @@ const Popularjobs: FC = () => {
 
   const isLoading = false
   const error = false
-  let data: any = useFetch(GET, 'vacancies').data
+
 
   // const [data, setData] = useState([])
 
   const [selectedJob, setSelectedJob] = useState();
 
   const handleCardPress = (item) => {
-    router.push(`/job-details/${item.id}`);
+    router.push(`/vacancies/${item.id}`);
     setSelectedJob(item.id);
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Популярні роботи</Text>
+        <Text style={styles.headerTitle}>{title}</Text>
         <TouchableOpacity>
           <Text style={styles.headerBtn}>Показати всі</Text>
         </TouchableOpacity>
@@ -60,6 +65,7 @@ const Popularjobs: FC = () => {
             )}
             keyExtractor={(item) => item.id}
             contentContainerStyle={{ columnGap: SIZES.medium }}
+            showsHorizontalScrollIndicator={false}
             horizontal
           />
         )}
@@ -68,4 +74,4 @@ const Popularjobs: FC = () => {
   );
 };
 
-export default Popularjobs;
+export default JobTiles;

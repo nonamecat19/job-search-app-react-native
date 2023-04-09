@@ -1,16 +1,23 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import {RequestMethod, RequestPath} from "../types/request";
+import {GET} from "../constants/requests";
 
 
-const useFetch = (method: RequestMethod, path: RequestPath) => {
+const useFetch = (method: RequestMethod, path: RequestPath, params?: any) => {
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
+  let myPath = path
+
+  if (params && method === GET) {
+    myPath += '?' + new URLSearchParams(params).toString()
+  }
+
   const options = {
     method: method,
-    url: `https://thankful-yoke-crow.cyclic.app/${path}`,
+    url: `https://job-search-app.cyclic.app/${myPath}`,
     // method: 'GET',
 
     // headers: {
@@ -25,8 +32,6 @@ const useFetch = (method: RequestMethod, path: RequestPath) => {
 
     try {
       const response = await axios.request(options)
-
-      console.log(response.data)
       setData(response.data)
       setIsLoading(false)
     } catch (error) {
