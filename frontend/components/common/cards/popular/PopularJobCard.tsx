@@ -14,8 +14,8 @@ const PopularJobCard = ({ item, selectedJob, handleCardPress }) => {
       <TouchableOpacity style={styles.logoContainer()}>
         <Image
           source={{
-            uri: checkImageURL(item?.employer_logo)
-              ? item.employer_logo
+            uri: checkImageURL(item?.logo)
+              ? item.logo
               : "https://t4.ftcdn.net/jpg/05/05/61/73/360_F_505617309_NN1CW7diNmGXJfMicpY9eXHKV4sqzO5H.jpg",
           }}
           resizeMode='contain'
@@ -35,8 +35,8 @@ const PopularJobCard = ({ item, selectedJob, handleCardPress }) => {
         <View style={styles.infoWrapper}>
           {/*@ts-ignore*/}
           <Text style={styles.publisher(selectedJob, item)}>
-            {item?.location ?? ''} -
-            {item?.tags.map((element) => element.name)}
+            {item?.location ?? ''}
+            {item?.minSalary && ` ${item?.minSalary} ${item?.maxSalary !== item?.minSalary && ` - ${item?.maxSalary}`} грн`}
           </Text>
           {/*<Text style={styles.location}> {item.job_country}</Text>*/}
         </View>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   View,
   Text,
@@ -6,21 +5,14 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
-} from "react-native";
-import { useRouter } from "expo-router";
+} from "react-native"
+import { useRouter } from "expo-router"
 
-import styles from "./welcome.style";
-import { icons, SIZES } from "../../../constants";
-import useFetch from "../../../hook/useFetch";
-import {GET} from "../../../constants/requests";
-
-const jobTypes = ["Повна", "Часткова", "Контракт"]
+import styles from "./welcome.style"
+import { icons } from "../../../constants"
 
 const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
   const router = useRouter()
-  const [activeJobType, setActiveJobType] = useState("Повна")
-
-    const employmentTypesData = useFetch(GET, 'employmentTypes')
 
   let user = 'Олександр'
 
@@ -50,7 +42,6 @@ const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
         </TouchableOpacity>
       </View>
     </View>
-  );
-};
-
-export default Welcome;
+  )
+}
+export default Welcome
