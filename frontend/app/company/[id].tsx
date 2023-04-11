@@ -1,13 +1,13 @@
-import {Stack, useRouter, useSearchParams} from "expo-router";
-import {useCallback, useState} from "react";
+import {Stack, useRouter, useSearchParams} from "expo-router"
+import React, {useCallback, useState} from "react"
 import {
     View,
     Text,
     SafeAreaView,
     ScrollView,
     ActivityIndicator,
-    RefreshControl,
-} from "react-native";
+    RefreshControl, Image,
+} from "react-native"
 
 import {
     About,
@@ -15,20 +15,23 @@ import {
     JobTabs,
     ScreenHeaderBtn,
     Specifics,
-} from "../../components";
-import {COLORS, icons, SIZES} from "../../constants";
-import useFetch from "../../hook/useFetch";
-import {GET} from "../../constants/requests";
+} from "../../components"
+import {COLORS, icons, SIZES} from "../../constants"
+import useFetch from "../../hook/useFetch"
+import {GET} from "../../constants/requests"
 import {FC} from "react"
-import Company from "../../components/jobdetails/company/Company";
+import Company from "../../components/jobdetails/company/Company"
+import VacancyContainer from "../../components/common/vacancyContainer";
+import styles from "../../components/jobdetails/company/company.style";
+import {checkImageURL} from "../../utils";
 
-const tabs = ["Про нас", "Ми пропонуємо", "Вимоги"];
+const tabs = ["Про нас", "Вакансії"]
 
-const JobDetails: FC = () => {
-    const params = useSearchParams();
-    const router = useRouter();
+const CompanyDetails: FC = () => {
+    const params = useSearchParams()
+    const router = useRouter()
 
-    const {data, isLoading, error, refetch} = useFetch(GET, `vacancies/${params.id}`);
+    const {data, isLoading, error, refetch} = useFetch(GET, `companies/${params.id}`);
 
     const [activeTab, setActiveTab] = useState(tabs[0]);
     const [refreshing, setRefreshing] = useState(false);
@@ -41,34 +44,22 @@ const JobDetails: FC = () => {
 
     const DisplayTabContent = () => {
         switch (activeTab) {
-            case "Ми пропонуємо":
-                return (
-                    <Specifics
-                        title='Ми пропонуємо'
-                        // @ts-ignore
-                        points={data.offers}
-                    />
-                );
-
             case "Про нас":
                 return (
                     // @ts-ignore
-                    <About info={data.description ?? "No data provided"}/>
-                );
+                    <About info={data?.description ?? "Немає даних"} text={"Дані про компанію:"}/>
+                )
 
-            case "Вимоги":
-                return (
-                    <Specifics
-                        title='Вимоги'
-                        // @ts-ignore
-                        points={data.requirements ?? ["N/A"]}
-                    />
-                );
+            case "Вакансії":
+                //     @ts-ignore
+                return <VacancyContainer data={data?.vacancies ?? []}/>
+
+
 
             default:
-                return null;
+                return null
         }
-    };
+    }
 
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: COLORS.lightWhite}}>
@@ -107,23 +98,38 @@ const JobDetails: FC = () => {
                         <Text>Немає даних</Text>
                     ) : (
                         <View style={{padding: SIZES.medium, paddingBottom: 100}}>
-                            {/*@ts-ignore*/}
-                            <Company data={data}/>
+                            {/*<Company data={data}/>*/}
+                            <View style={styles.container}>
+                                <View style={styles.logoBox}>
+                                    <Image
+                                        source={{
+                                            // @ts-ignore
+                                            uri: checkImageURL(data?.logo)
+                                                // @ts-ignore
+                                                ? data?.logo
+                                                : `https://t4.ftcdn.net/jpg/05/05/61/73/360_F_505617309_NN1CW7diNmGXJfMicpY9eXHKV4sqzO5H.jpg`
+                                        }}
+                                        style={styles.logoImage}
+                                    />
+                                </View>
+
+                                <View style={styles.companyInfoBox}>
+                                    {/*@ts-ignore*/}
+                                    <Text style={styles.companyName}>{data?.name ?? 'Ім\'я не зазначено'}</Text>
+                                </View>
+                            </View>
                             <JobTabs
                                 tabs={tabs}
                                 activeTab={activeTab}
                                 setActiveTab={setActiveTab}
                             />
-
                             <DisplayTabContent/>
                         </View>
                     )}
                 </ScrollView>
-
-                <JobFooter url={'' ?? 'https://careers.google.com/jobs/results/'}/>
             </>
         </SafeAreaView>
-    );
-};
+    )
+}
 
-export default JobDetails;
+export default CompanyDetails

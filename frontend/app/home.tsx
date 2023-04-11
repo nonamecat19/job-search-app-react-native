@@ -5,17 +5,17 @@ import {Stack, useRouter} from "expo-router"
 import {COLORS, icons, images, SIZES} from "../constants"
 import {
     ScreenHeaderBtn,
-    Welcome,
 } from "../components"
 import useFetch from "../hook/useFetch"
 import {GET} from "../constants/requests"
 import JobTiles from "../components/home/JobTiles/JobTiles"
+import Welcome from "../components/home/welcome/Welcome";
 
 const Home = () => {
     const router = useRouter()
     const [searchTerm, setSearchTerm] = useState("")
 
-    let popularData: any = useFetch(GET, 'vacancies')
+    // let popularData: any = useFetch(GET, 'vacancies')
 
     let recommend: any = useFetch(GET, 'vacancies/recommendations')
 
@@ -42,6 +42,7 @@ const Home = () => {
                         padding: SIZES.medium,
                     }}
                 >
+
                     <FlatList
                         ListHeaderComponent={
                             <>
@@ -50,24 +51,19 @@ const Home = () => {
                                     setSearchTerm={setSearchTerm}
                                     handleClick={() => {
                                         if (searchTerm) {
-                                            router.push(`/search/${searchTerm}`)
+                                            router.push(`/search/${searchTerm}?`)
                                         }
                                     }}
-                                />
-                                <JobTiles
-                                    data={popularData.data}
-                                    title={"Популярні роботи"}
                                 />
                             </>
                         }
                         data={recommend.data}
                         renderItem={({item}) => (
                             !recommend.isLoading && item.length > 0
-                                ? <JobTiles
+                                && <JobTiles
                                     data={item}
                                     title={item[0].category.name}
                                 />
-                                : null
                         )}
                         keyExtractor={() => Math.random().toString()}
                     />

@@ -2,10 +2,10 @@ import { View, Text } from "react-native";
 
 import styles from "./about.style";
 
-const About = ({ info }: any) => {
+const About = ({ info, text = "Про роботу:" }: any) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.headText}>Про роботу:</Text>
+      <Text style={styles.headText}>{text}</Text>
 
       <View style={styles.contentBox}>
         <Text style={styles.contextText}>{info}</Text>
