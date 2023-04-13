@@ -5,4 +5,5 @@ export type ResponseType = {
     isError: boolean
     data: any
     errorMessage: string
+    status: number
 }

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import {SafeAreaView, ScrollView, View, Text, FlatList} from "react-native"
+import {SafeAreaView, ScrollView, View, Text, FlatList, Button} from "react-native"
 import {Stack, useRouter} from "expo-router"
 
 import {COLORS, icons, images, SIZES} from "../constants"
@@ -10,6 +10,7 @@ import useFetch from "../hook/useFetch"
 import {GET} from "../constants/requests"
 import JobTiles from "../components/home/JobTiles/JobTiles"
 import Welcome from "../components/home/welcome/Welcome";
+import useStore from "../store/store";
 
 const Home = () => {
     const router = useRouter()
@@ -17,7 +18,14 @@ const Home = () => {
 
     let recommend: any = useFetch(GET, 'vacancies/recommendations')
 
-
+    // @ts-ignore
+    const update = useStore(state => state.updateData)
+    useEffect(() => {
+        // TODO: FIX
+        update()
+    }, [])
+    // @ts-ignore
+    const zustandData = useStore(state => state.data)
 
     return (
         <SafeAreaView style={{
@@ -37,7 +45,9 @@ const Home = () => {
                     headerTitle: "",
                 }}
             />
-
+            <Text>
+                {JSON.stringify(zustandData)}
+            </Text>
             <SafeAreaView style={{flex: 1}}>
                 <View
                     style={{

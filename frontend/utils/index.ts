@@ -1,6 +1,7 @@
 import axios from "axios";
 import {RequestMethod, RequestPath, ResponseType} from "../types/request";
 import {GET} from "../constants/requests";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const checkImageURL = (url) => {
     if (!url) return false
@@ -17,29 +18,31 @@ export const request = async (method: RequestMethod, path: RequestPath, params: 
     if (params && method === GET) {
         myPath += '?' + new URLSearchParams(params).toString()
     }
-
+    const token = await AsyncStorage.getItem('@authToken')
     const options = {
         method: method,
         url: `https://job-search-app.cyclic.app/${myPath}`,
         data: params,
-        // headers: {
-        //   "X-RapidAPI-Key": 'b10428f313msh3ebc9da1d3b5e2cp1f92b2jsn48e26f266e19',
-        //   "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
-        // },
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
     }
 
     try {
         const response = await axios.request(options)
+        console.log(response.data)
         return {
             isError: false,
             data: response.data,
-            errorMessage: ''
+            errorMessage: '',
+            status: response.status
         }
     } catch (error) {
         return {
             isError: true,
             data: null,
-            errorMessage: error.message
+            errorMessage: error.message,
+            status: error.status
         }
     }
 }
