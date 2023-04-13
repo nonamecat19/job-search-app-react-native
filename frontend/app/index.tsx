@@ -1,7 +1,8 @@
 import { Redirect } from "expo-router";
 import React, { useEffect } from 'react';
 import {LogBox} from 'react-native';
-
+import {Provider} from "react-redux";
+import store from './../redux/store'
 
 export default function Index() {
 
@@ -9,5 +10,9 @@ export default function Index() {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     }, [])
 
-    return <Redirect href="home"/>
+    return (
+        <Provider store={store}>
+            <Redirect href="home"/>
+        </Provider>
+    )
 }

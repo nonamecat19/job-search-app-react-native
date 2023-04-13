@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/cyclic-software/starter-express-api#readme",
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.18.1",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -27,7 +28,9 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "react-native-draggable-flatlist": "^4.0.1",
-    "validator": "^13.9.0"
+    "react-native-login-screen": "^5.0.0",
+    "validator": "^13.9.0",
+    "react-native": "0.71.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

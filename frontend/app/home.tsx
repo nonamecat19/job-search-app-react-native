@@ -15,9 +15,8 @@ const Home = () => {
     const router = useRouter()
     const [searchTerm, setSearchTerm] = useState("")
 
-    // let popularData: any = useFetch(GET, 'vacancies')
-
     let recommend: any = useFetch(GET, 'vacancies/recommendations')
+
 
 
     return (
@@ -30,7 +29,11 @@ const Home = () => {
                     headerStyle: {backgroundColor: COLORS.lightWhite},
                     headerShadowVisible: false,
                     headerLeft: () => <ScreenHeaderBtn iconUrl={icons.menu} dimension='60%'/>,
-                    headerRight: () => <ScreenHeaderBtn iconUrl={images.profile} dimension='100%'/>,
+                    headerRight: () => <ScreenHeaderBtn
+                        iconUrl={images.profile}
+                        dimension='100%'
+                        handlePress={() => router.push('/auth/login')}
+                    />,
                     headerTitle: "",
                 }}
             />
