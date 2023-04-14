@@ -14,7 +14,6 @@ import SearchCard from "../../components/common/search";
 const JobSearch = () => {
     const [params, setParams] = useState(useSearchParams())
 
-    console.log(params)
     const router = useRouter()
     //
     const {data, isLoading, error} = useFetch(GET, '/vacancies/search/', params)

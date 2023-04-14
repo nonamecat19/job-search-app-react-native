@@ -14,17 +14,16 @@ import useStore from "../store/store";
 
 const Home = () => {
     const router = useRouter()
-    const [searchTerm, setSearchTerm] = useState("")
+    const [searchTerm, setSearchTerm] = useState<string>("")
 
     let recommend: any = useFetch(GET, 'vacancies/recommendations')
 
-    // @ts-ignore
     const update = useStore(state => state.updateData)
     useEffect(() => {
         // TODO: FIX
         update()
     }, [])
-    // @ts-ignore
+
     const zustandData = useStore(state => state.data)
 
     return (
@@ -36,18 +35,15 @@ const Home = () => {
                 options={{
                     headerStyle: {backgroundColor: COLORS.lightWhite},
                     headerShadowVisible: false,
-                    headerLeft: () => <ScreenHeaderBtn iconUrl={icons.menu} dimension='60%'/>,
                     headerRight: () => <ScreenHeaderBtn
-                        iconUrl={images.profile}
-                        dimension='100%'
-                        handlePress={() => router.push('/auth/login')}
+                        iconUrl={icons.menu}
+                        dimension='50%'
+                        handlePress={() => router.push(zustandData?.role ? `/${zustandData.role}/profile` : `/auth/login`)}
+                        // handlePress={() => router.push('/worker/profile')}
                     />,
                     headerTitle: "",
                 }}
             />
-            <Text>
-                {JSON.stringify(zustandData)}
-            </Text>
             <SafeAreaView style={{flex: 1}}>
                 <View
                     style={{

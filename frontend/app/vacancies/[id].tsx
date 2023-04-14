@@ -6,7 +6,7 @@ import {
     SafeAreaView,
     ScrollView,
     ActivityIndicator,
-    RefreshControl,
+    RefreshControl, Alert,
 } from "react-native";
 
 import {
@@ -21,6 +21,8 @@ import useFetch from "../../hook/useFetch";
 import {GET} from "../../constants/requests";
 import {FC} from "react"
 import Company from "../../components/jobdetails/company/Company";
+import useStore from "../../store/store";
+import {request} from "../../utils";
 
 const tabs = ["Про нас", "Ми пропонуємо", "Вимоги"];
 
@@ -28,16 +30,18 @@ const JobDetails: FC = () => {
     const params = useSearchParams();
     const router = useRouter();
 
-    const {data, isLoading, error, refetch} = useFetch(GET, `vacancies/${params.id}`);
+    const vacancyData = useFetch(GET, `vacancies/${params.id}`)
+
 
     const [activeTab, setActiveTab] = useState(tabs[0]);
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        refetch()
+        vacancyData.refetch()
         setRefreshing(false)
     }, [])
+
 
     const DisplayTabContent = () => {
         switch (activeTab) {
@@ -46,14 +50,14 @@ const JobDetails: FC = () => {
                     <Specifics
                         title='Ми пропонуємо'
                         // @ts-ignore
-                        points={data.offers}
+                        points={vacancyData.data.offers}
                     />
                 );
 
             case "Про нас":
                 return (
                     // @ts-ignore
-                    <About info={data.description ?? "No data provided"}/>
+                    <About info={vacancyData.data.description ?? "No data provided"}/>
                 );
 
             case "Вимоги":
@@ -61,7 +65,7 @@ const JobDetails: FC = () => {
                     <Specifics
                         title='Вимоги'
                         // @ts-ignore
-                        points={data.requirements ?? ["N/A"]}
+                        points={vacancyData.data.requirements ?? ["N/A"]}
                     />
                 );
 
@@ -84,44 +88,37 @@ const JobDetails: FC = () => {
                             handlePress={() => router.back()}
                         />
                     ),
-                    headerRight: () => (
-                        <ScreenHeaderBtn
-                            iconUrl={icons.share}
-                            dimension='60%'
-                        />
-                    ),
                     headerTitle: "",
                 }}
             />
 
-            <>
-                <ScrollView showsVerticalScrollIndicator={false}
-                            refreshControl={
-                                <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
-                >
-                    {isLoading ? (
-                        <ActivityIndicator size='large' color={COLORS.primary}/>
-                    ) : error ? (
-                        <Text>Щось пішло не так</Text>
-                    ) : data.length === 0 ? (
-                        <Text>Немає даних</Text>
-                    ) : (
-                        <View style={{padding: SIZES.medium, paddingBottom: 100}}>
-                            {/*@ts-ignore*/}
-                            <Company data={data}/>
-                            <JobTabs
-                                tabs={tabs}
-                                activeTab={activeTab}
-                                setActiveTab={setActiveTab}
-                            />
+            <ScrollView showsVerticalScrollIndicator={false}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
+            >
+                {vacancyData.isLoading ? (
+                    <ActivityIndicator size='large' color={COLORS.primary}/>
+                ) : vacancyData.error ? (
+                    <Text>Щось пішло не так</Text>
+                ) : vacancyData.data.length === 0 ? (
+                    <Text>Немає даних</Text>
+                ) : (
+                    <View style={{padding: SIZES.medium, paddingBottom: 100}}>
+                        {/*@ts-ignore*/}
+                        <Company data={vacancyData.data}/>
+                        <JobTabs
+                            tabs={tabs}
+                            activeTab={activeTab}
+                            setActiveTab={setActiveTab}
+                        />
 
-                            <DisplayTabContent/>
-                        </View>
-                    )}
-                </ScrollView>
+                        <DisplayTabContent/>
+                    </View>
+                )}
+            </ScrollView>
 
-                <JobFooter url={'' ?? 'https://careers.google.com/jobs/results/'}/>
-            </>
+            <JobFooter url={'' ?? 'https://careers.google.com/jobs/results/'}/>
+
         </SafeAreaView>
     );
 };

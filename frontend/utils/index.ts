@@ -28,9 +28,9 @@ export const request = async (method: RequestMethod, path: RequestPath, params: 
         }
     }
 
+
     try {
         const response = await axios.request(options)
-        console.log(response.data)
         return {
             isError: false,
             data: response.data,

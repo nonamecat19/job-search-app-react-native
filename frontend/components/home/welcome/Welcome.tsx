@@ -10,32 +10,17 @@ import {useRouter} from "expo-router"
 
 import styles from "./welcome.style"
 import {icons} from "../../../constants"
-import {useEffect, useState} from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import useStore from "../../../store/store";
 
 const Welcome = ({searchTerm, setSearchTerm, handleClick}) => {
     const router = useRouter()
 
-
-    const [user, setUser] = useState<string>('Гість')
-
-    useEffect(() => {
-        AsyncStorage.getItem('@userData')
-            .then (data => {
-                return JSON.parse(data)
-            })
-            .catch(() => {})
-            .then(data => {
-                if (data.firstName) {
-                    setUser(data.firstName)
-                }
-            })
-    }, [])
+    const zustandData = useStore(state => state.data)
 
     return (
         <View>
             <View style={styles.container}>
-                <Text style={styles.userName}>Привіт {user}</Text>
+                <Text style={styles.userName}>Привіт {zustandData?.firstName ?? 'Гість'}</Text>
                 <Text style={styles.welcomeMessage}>Знайдіть свою ідеальну роботу</Text>
             </View>
 

@@ -1,13 +1,15 @@
 import React, {FC, useEffect, useState} from "react";
 import {Alert, SafeAreaView, Text, TouchableOpacity, View} from "react-native";
-import { COLORS } from "../../constants";
+import {COLORS, icons} from "../../constants";
 import AppTextInput from "../../components/common/appTextInput";
-import {useRouter} from "expo-router";
+import {Stack, useRouter} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import SwitchSelector from 'react-native-switch-selector'
 import {COMPANY, WORKER} from "../../constants/roles";
 import {request} from "../../utils";
-import {POST} from "../../constants/requests";
+import {GET, POST} from "../../constants/requests";
+import {ScreenHeaderBtn} from "../../components";
+import useStore from "../../store/store";
 
 interface Props {
 
@@ -24,8 +26,11 @@ const Login: FC<Props> = () => {
         setIsRegister(!isRegister)
     }
 
+
     const [role, setRole] = useState<string>(WORKER)
 
+
+    const updateData = useStore(state => state.updateData)
 
     const submitHandler = async () => {
 
@@ -46,9 +51,9 @@ const Login: FC<Props> = () => {
             try {
                 let response = await request(POST, 'users/login', data)
                 let token = response.data.token
-                await AsyncStorage.setItem('@userData', JSON.stringify(response.data.data))
                 await AsyncStorage.setItem('@authToken', token)
-                Alert.alert(JSON.stringify(token))
+                await updateData()
+                router.push('/home')
             } catch (error) {
                 Alert.alert(error.message)
             }
@@ -62,6 +67,21 @@ const Login: FC<Props> = () => {
 
     return(
         <SafeAreaView>
+            <Stack.Screen
+                options={{
+                    headerStyle: {backgroundColor: COLORS.white2},
+                    headerShadowVisible: false,
+                    headerBackVisible: false,
+                    headerLeft: () => (
+                        <ScreenHeaderBtn
+                            iconUrl={icons.left}
+                            dimension='60%'
+                            handlePress={() => router.back()}
+                        />
+                    ),
+                    headerTitle: "",
+                }}
+            />
             <View
                 style={{
                     padding: 30,

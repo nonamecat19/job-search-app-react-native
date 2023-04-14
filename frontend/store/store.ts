@@ -1,20 +1,27 @@
 import {create} from "zustand"
 import {request} from "../utils"
-import {GET, POST} from "../constants/requests"
+import {GET} from "../constants/requests"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const useStore = create((set) => ({
 
+interface Actions {
+    updateData: () => void
+    logout: () => void
+}
+
+interface State {
+    data: any
+}
+
+const useStore = create<Actions & State>((set) => ({
     data: {},
     updateData: async () => {
-
-
         let response = await request(GET, 'users/me')
         set({data: response.data})
-
-        // let token = response.data.token
-        //
-        // await AsyncStorage.setItem('@authToken', token)
+    },
+    logout: () => {
+        set({data: null})
+        AsyncStorage.setItem('@authToken', "")
     }
 }))
-
 export default useStore
