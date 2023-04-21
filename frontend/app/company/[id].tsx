@@ -54,8 +54,6 @@ const CompanyDetails: FC = () => {
                 //     @ts-ignore
                 return <VacancyContainer data={data?.vacancies ?? []}/>
 
-
-
             default:
                 return null
         }
@@ -75,59 +73,51 @@ const CompanyDetails: FC = () => {
                             handlePress={() => router.back()}
                         />
                     ),
-                    headerRight: () => (
-                        <ScreenHeaderBtn
-                            iconUrl={icons.share}
-                            dimension='60%'
-                        />
-                    ),
                     headerTitle: "",
                 }}
             />
 
-            <>
-                <ScrollView showsVerticalScrollIndicator={false}
-                            refreshControl={
-                                <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
-                >
-                    {isLoading ? (
-                        <ActivityIndicator size='large' color={COLORS.primary}/>
-                    ) : error ? (
-                        <Text>Щось пішло не так</Text>
-                    ) : data.length === 0 ? (
-                        <Text>Немає даних</Text>
-                    ) : (
-                        <View style={{padding: SIZES.medium, paddingBottom: 100}}>
-                            {/*<Company data={data}/>*/}
-                            <View style={styles.container}>
-                                <View style={styles.logoBox}>
-                                    <Image
-                                        source={{
+            <ScrollView showsVerticalScrollIndicator={false}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
+            >
+                {isLoading ? (
+                    <ActivityIndicator size='large' color={COLORS.primary}/>
+                ) : error ? (
+                    <Text>Щось пішло не так</Text>
+                ) : data.length === 0 ? (
+                    <Text>Немає даних</Text>
+                ) : (
+                    <View style={{padding: SIZES.medium, paddingBottom: 100}}>
+                        {/*<Company data={data}/>*/}
+                        <View style={styles.container}>
+                            <View style={styles.logoBox}>
+                                <Image
+                                    source={{
+                                        // @ts-ignore
+                                        uri: checkImageURL(data?.logo)
                                             // @ts-ignore
-                                            uri: checkImageURL(data?.logo)
-                                                // @ts-ignore
-                                                ? data?.logo
-                                                : `https://t4.ftcdn.net/jpg/05/05/61/73/360_F_505617309_NN1CW7diNmGXJfMicpY9eXHKV4sqzO5H.jpg`
-                                        }}
-                                        style={styles.logoImage}
-                                    />
-                                </View>
-
-                                <View style={styles.companyInfoBox}>
-                                    {/*@ts-ignore*/}
-                                    <Text style={styles.companyName}>{data?.name ?? 'Ім\'я не зазначено'}</Text>
-                                </View>
+                                            ? data?.logo
+                                            : `https://t4.ftcdn.net/jpg/05/05/61/73/360_F_505617309_NN1CW7diNmGXJfMicpY9eXHKV4sqzO5H.jpg`
+                                    }}
+                                    style={styles.logoImage}
+                                />
                             </View>
-                            <JobTabs
-                                tabs={tabs}
-                                activeTab={activeTab}
-                                setActiveTab={setActiveTab}
-                            />
-                            <DisplayTabContent/>
+
+                            <View style={styles.companyInfoBox}>
+                                {/*@ts-ignore*/}
+                                <Text style={styles.companyName}>{data?.name ?? 'Ім\'я не зазначено'}</Text>
+                            </View>
                         </View>
-                    )}
-                </ScrollView>
-            </>
+                        <JobTabs
+                            tabs={tabs}
+                            activeTab={activeTab}
+                            setActiveTab={setActiveTab}
+                        />
+                        <DisplayTabContent/>
+                    </View>
+                )}
+            </ScrollView>
         </SafeAreaView>
     )
 }

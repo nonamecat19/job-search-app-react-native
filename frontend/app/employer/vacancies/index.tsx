@@ -1,18 +1,18 @@
-import React, {FC, useCallback, useEffect, useState} from "react";
-import {View, Text, ActivityIndicator, ScrollView, RefreshControl} from "react-native";
+import React, {FC, useCallback, useState} from "react";
+import {Text, ActivityIndicator, ScrollView, RefreshControl} from "react-native";
 import {Stack, useRouter} from "expo-router";
-import {COLORS, icons} from "../../constants";
-import {ScreenHeaderBtn} from "../../components";
-import useFetch from "../../hook/useFetch";
-import {GET} from "../../constants/requests";
-import VacancyContainer from "../../components/common/vacancyContainer";
+import {COLORS, icons} from "../../../constants";
+import {ScreenHeaderBtn} from "../../../components";
+import useFetch from "../../../hook/useFetch";
+import {GET} from "../../../constants/requests";
+import EmployerVacancyContainer from "../../../components/common/employerVacancyContainer";
 
 
-const Favorite: FC = () => {
+const Vacancies: FC = () => {
 
     const router = useRouter()
 
-    const {data, isLoading, refetch} = useFetch(GET, 'workers/getSaves')
+    const {data, isLoading, refetch} = useFetch(GET, 'companies/vacancies')
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -20,9 +20,7 @@ const Favorite: FC = () => {
         setRefreshing(true);
         refetch()
         setRefreshing(false)
-    }, [])
-
-
+    }, [refetch])
 
     return (
         <ScrollView
@@ -47,11 +45,12 @@ const Favorite: FC = () => {
                     headerTitle: "",
                 }}
             />
+
             {
                 isLoading
                     ? <ActivityIndicator size={"large"} color={COLORS.primary}/>
                     : data.length > 0
-                        ? <VacancyContainer data={data}/>
+                        ? <EmployerVacancyContainer data={data}/>
                         : <Text
                             style={{
                                 fontSize: 20,
@@ -63,9 +62,8 @@ const Favorite: FC = () => {
                             Покищо ви не зберігали вакансії. Це можна зробити натиснувши на сердечко
                         </Text>
             }
-
         </ScrollView>
     )
 }
 
-export default Favorite
+export default Vacancies

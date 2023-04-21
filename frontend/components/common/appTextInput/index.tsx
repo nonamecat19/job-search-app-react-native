@@ -13,7 +13,7 @@ const AppTextInput: FC<TextInputProps> = ({ ...otherProps }) => {
                 {
                     // fontFamily: Font["poppins-regular"],
                     fontSize: 14,
-                    padding: 20,
+                    padding: 15,
                     backgroundColor: COLORS.white,
                     borderRadius: 10,
                     marginVertical: 10,

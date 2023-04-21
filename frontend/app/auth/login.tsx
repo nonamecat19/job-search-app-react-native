@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
-import {Alert, SafeAreaView, Text, TouchableOpacity, View} from "react-native";
+import {Alert, SafeAreaView, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, icons} from "../../constants";
 import AppTextInput from "../../components/common/appTextInput";
 import {Stack, useRouter} from "expo-router";
@@ -21,17 +21,17 @@ const Login: FC<Props> = () => {
 
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+    const [firstName, setFirstName] = useState<string>('')
+    const [lastName, setLastName] = useState<string>('')
+    const [companyName, setCompanyName] = useState<string>('')
+    const [companyLogo, setCompanyLogo] = useState<string>('')
     const router = useRouter()
     const changeHandler = async () => {
         setIsRegister(!isRegister)
     }
-
-
     const [role, setRole] = useState<string>(WORKER)
 
-
     const updateData = useStore(state => state.updateData)
-
     const submitHandler = async () => {
 
         let data = {
@@ -40,10 +40,36 @@ const Login: FC<Props> = () => {
         }
 
         if (isRegister) {
+            let dataRegister: any = {
+                user: {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    password: password
+                }
+            }
             try {
-                //
-                Alert.alert(JSON.stringify(data))
-                // TODO: LOGIN
+                if (role === WORKER) {
+                    request(POST, 'workers', dataRegister)
+                        .then((res) => {
+                            Alert.alert('Успіх')
+                        })
+                        .catch((error) => {
+                            Alert.alert('Помилка! ' + error)
+                        })
+                } else {
+                    dataRegister.company = {
+                        name: companyName,
+                        logo: companyLogo
+                    }
+                    request(POST, 'companies', dataRegister)
+                        .then((res) => {
+                            Alert.alert('Успіх')
+                        })
+                        .catch((error) => {
+                            Alert.alert('Помилка! ' + error)
+                        })
+                }
             } catch (error) {
                 Alert.alert(error.message)
             }
@@ -61,12 +87,12 @@ const Login: FC<Props> = () => {
     }
 
     const options = [
-        { label: 'Шукаю роботу', value: WORKER },
-        { label: 'Я роботодавець', value: COMPANY }
+        {label: 'Шукаю роботу', value: WORKER},
+        {label: 'Я роботодавець', value: COMPANY}
     ]
 
-    return(
-        <SafeAreaView>
+    return (
+        <ScrollView>
             <Stack.Screen
                 options={{
                     headerStyle: {backgroundColor: COLORS.white2},
@@ -82,22 +108,12 @@ const Login: FC<Props> = () => {
                     headerTitle: "",
                 }}
             />
-            <View
-                style={{
-                    padding: 30,
-                }}
-            >
-                <View
-                    style={{
-                        alignItems: "center",
-                    }}
-                >
+            <View style={{padding: 30}}>
+                <View style={{alignItems: "center"}}>
                     <Text
                         style={{
                             fontSize: 30,
-                            color: COLORS.primary,
-                            // fontFamily: Font["poppins-bold"],
-                            marginVertical: 20,
+                            color: COLORS.primary
                         }}
                     >
                         {isRegister ? 'Зареєструватися' : 'Увійти'}
@@ -105,20 +121,51 @@ const Login: FC<Props> = () => {
                 </View>
                 <View>
                     <AppTextInput
-                        placeholder="Email"
+                        placeholder="Електронна пошта"
                         value={email}
                         onChangeText={text => setEmail(text)}
                     />
                     <AppTextInput
-                        placeholder="Password"
+                        placeholder="Пароль"
                         value={password}
                         onChangeText={text => setPassword(text)}
                     />
+                    {
+                        isRegister &&
+                        <>
+                            <AppTextInput
+                                placeholder="Ім'я"
+                                value={firstName}
+                                onChangeText={text => setFirstName(text)}
+                            />
+                            <AppTextInput
+                                placeholder="Прізвище"
+                                value={lastName}
+                                onChangeText={text => setLastName(text)}
+                            />
+                            {
+                                role === COMPANY &&
+                                <>
+                                    <AppTextInput
+                                        placeholder="Назва компанії"
+                                        value={companyName}
+                                        onChangeText={text => setCompanyName(text)}
+                                    />
+                                    <AppTextInput
+                                        placeholder="Логотип (не обов'язково)"
+                                        value={companyLogo}
+                                        onChangeText={text => setCompanyLogo(text)}
+                                    />
+                                </>
+                            }
+                        </>
+                    }
+
                 </View>
 
                 {
                     isRegister
-                    ? <SwitchSelector
+                        ? <SwitchSelector
                             options={options}
                             initial={0}
                             onPress={value => setRole(value)}
@@ -128,7 +175,7 @@ const Login: FC<Props> = () => {
                             buttonColor={COLORS.primary}
                             hasPadding
                         />
-                    : <View style={{height: 40}}/>
+                        : <View style={{height: 40}}/>
                 }
 
 
@@ -177,7 +224,7 @@ const Login: FC<Props> = () => {
                 </TouchableOpacity>
 
             </View>
-        </SafeAreaView>
+        </ScrollView>
     )
 
 }

@@ -4,7 +4,7 @@ export type VacancyType = {
     description: string
     minSalary?: number
     maxSalary?: number
-    logo?: string
+    // logo?: string
     requirements: string[]
     offers: string[]
     date: Date
@@ -13,6 +13,19 @@ export type VacancyType = {
     tags: InfoType[]
     available: boolean
     id: string
+}
+
+export type AddVacancyType = {
+    title: string
+    description: string
+    requirements: string[]
+    offers: string[]
+    location?: string
+    category: string
+    employmentType: string
+    tags: string[]
+    minSalary?: number
+    maxSalary?: number
 }
 
 export type InfoType = {

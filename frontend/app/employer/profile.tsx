@@ -38,10 +38,10 @@ const Profile: FC = () => {
                 }}
             />
 
-            <MenuItem name={'Мої резюме'} path={'worker/resumes'}/>
-            <MenuItem name={'Улюблені вакансії'} path={'worker/favorite'}/>
-            <MenuItem name={'Мої відгуки'} path={'worker/applications'}/>
-            <MenuItem name={'Налаштування'} path={'worker/settings'}/>
+            <MenuItem name={'Створити вакансію'} path={'employer/add'}/>
+            <MenuItem name={'Мої вакансії'} path={'employer/vacancies'}/>
+            <MenuItem name={'Мої відгуки'} path={'employer/applications'}/>
+            <MenuItem name={'Налаштування'} path={'employer/settings'}/>
             <MenuItem name={'Вийти'} func={logoutHandler}/>
 
         </View>

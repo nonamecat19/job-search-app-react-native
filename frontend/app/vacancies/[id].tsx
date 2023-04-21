@@ -23,6 +23,7 @@ import {FC} from "react"
 import Company from "../../components/jobdetails/company/Company";
 import useStore from "../../store/store";
 import {request} from "../../utils";
+import {WORKER} from "../../constants/roles";
 
 const tabs = ["Про нас", "Ми пропонуємо", "Вимоги"];
 
@@ -42,6 +43,8 @@ const JobDetails: FC = () => {
         setRefreshing(false)
     }, [])
 
+
+    const zustandData = useStore(state => state.data)
 
     const DisplayTabContent = () => {
         switch (activeTab) {
@@ -92,9 +95,9 @@ const JobDetails: FC = () => {
                 }}
             />
 
-            <ScrollView showsVerticalScrollIndicator={false}
-                        refreshControl={
-                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
             >
                 {vacancyData.isLoading ? (
                     <ActivityIndicator size='large' color={COLORS.primary}/>
@@ -116,8 +119,8 @@ const JobDetails: FC = () => {
                     </View>
                 )}
             </ScrollView>
+            {zustandData?.role === WORKER && <JobFooter/>}
 
-            <JobFooter url={'' ?? 'https://careers.google.com/jobs/results/'}/>
 
         </SafeAreaView>
     );

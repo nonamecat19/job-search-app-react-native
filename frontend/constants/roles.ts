@@ -1,3 +1,3 @@
-export const ADMIN = 'ADMIN'
-export const COMPANY = 'COMPANY'
-export const WORKER = 'WORKER'
+export const ADMIN = 'admin'
+export const COMPANY = 'company'
+export const WORKER = 'worker'

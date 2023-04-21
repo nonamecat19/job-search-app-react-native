@@ -1,28 +1,42 @@
 import {View, Text, TouchableOpacity, Image, Linking, Alert, ActivityIndicator} from "react-native";
 
-import styles from "./footer.style";
-import {COLORS, icons} from "../../../constants";
-import {useState} from "react";
-import {request} from "../../../utils";
-import {DELETE, GET, POST} from "../../../constants/requests";
-import {useSearchParams} from "expo-router";
-import useFetch from "../../../hook/useFetch";
+import styles from "./footer.style"
+import {COLORS, icons} from "../../../constants"
+import {FC} from "react"
+import {request} from "../../../utils"
+import {DELETE, GET, POST} from "../../../constants/requests"
+import {useSearchParams} from "expo-router"
+import useFetch from "../../../hook/useFetch"
 
-const Footer = ({url}) => {
-    const params = useSearchParams()
+interface Props {
 
-    const inSavesRequest = useFetch(GET, `workers/inSaves/${params.id}`)
+}
 
-    const saveHandler = async () => {
+const Footer: FC<Props> = () => {
+    const {id} = useSearchParams()
+
+    const inSavesRequest = useFetch(GET, `workers/inSaves/${id}`)
+
+    const saveHandler = async (): Promise<void> => {
         if (inSavesRequest.isLoading) {
             return
         }
         if (inSavesRequest.data) {
-            await request(DELETE, `workers/removeSave/${params.id}`)
+            await request(DELETE, `workers/removeSave/${id}`)
         } else {
-            await request(POST, `workers/addSave/${params.id}`)
+            await request(POST, `workers/addSave/${id}`)
         }
         await inSavesRequest.refetch()
+    }
+
+    const submitHandler = async (): Promise<void> => {
+        request(POST, `applications/${id}`)
+            .then(() => {
+                Alert.alert('Успіх', 'Заявка усппішно подана! Очікуйте на відповідь від роботодавця.')
+            })
+            .catch((error) => {
+                Alert.alert(error)
+            })
     }
 
     return (
@@ -44,12 +58,12 @@ const Footer = ({url}) => {
 
             <TouchableOpacity
                 style={styles.applyBtn}
-                onPress={() => Linking.openURL(url)}
+                onPress={submitHandler}
             >
                 <Text style={styles.applyBtnText}>Подати заявку</Text>
             </TouchableOpacity>
         </View>
-    );
-};
+    )
+}
 
-export default Footer;
+export default Footer
