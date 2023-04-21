@@ -13,7 +13,7 @@ const EmployerVacancyElement: FC<Props> = ({data}) => {
 
     const router = useRouter()
     const infoHandler = () => {
-        router.push('')
+        router.push(`/employer/vacancies/applications/${data.id}`)
     }
 
     const editHandler = () => {
@@ -58,9 +58,9 @@ const EmployerVacancyElement: FC<Props> = ({data}) => {
                     flexDirection: 'row',
                 }}
             >
-                <ElementButton onPress={infoHandler} text={'Інформація'}/>
+                <ElementButton onPress={infoHandler} text={'Відгуки'}/>
                 <ElementButton onPress={editHandler} text={'Редагувати'} color={COLORS.yellow}/>
-                {data.available && <ElementButton onPress={closeHandler} text={'Закрити'} color={COLORS.red}/>}
+                {data.available && <ElementButton onPress={closeHandler} text={'Закрити'} color={COLORS.tertiary}/>}
 
             </View>
 

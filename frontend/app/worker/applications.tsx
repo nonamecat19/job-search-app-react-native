@@ -1,12 +1,12 @@
 import React, {FC} from "react";
-import {ActivityIndicator, SafeAreaView, ScrollView, Text} from "react-native";
+import {ActivityIndicator, SafeAreaView} from "react-native";
 import {Stack, useRouter} from "expo-router";
 import {COLORS, icons} from "../../constants";
 import {ScreenHeaderBtn} from "../../components";
 import useFetch from "../../hook/useFetch";
 import {GET} from "../../constants/requests";
 import ApplicationsContainer from "../../components/applications/ApplicationsContainer";
-import {ApplicationElementType, ApplicationFetch} from "../../types/applications";
+import {ApplicationFetch} from "../../types/applications";
 
 
 const Applications: FC = () => {

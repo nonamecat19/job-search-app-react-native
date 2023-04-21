@@ -13,7 +13,7 @@ const Home = () => {
     const router = useRouter()
     const [searchTerm, setSearchTerm] = useState<string>("")
 
-    let recommend = useFetch(GET, 'vacancies/recommendations')
+    let recommend = useFetch<any>(GET, 'vacancies/recommendations')
     const update = useStore(state => state.updateData)
     useEffect(() => {
         update()
@@ -31,7 +31,7 @@ const Home = () => {
         setRefreshing(true);
         recommend.refetch()
         setRefreshing(false)
-    }, [])
+    }, [recommend.refetch])
 
     return (
         <ScrollView

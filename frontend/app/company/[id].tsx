@@ -24,6 +24,7 @@ import Company from "../../components/jobdetails/company/Company"
 import VacancyContainer from "../../components/common/vacancyContainer";
 import styles from "../../components/jobdetails/company/company.style";
 import {checkImageURL} from "../../utils";
+import {CompanyById} from "../../types/employer";
 
 const tabs = ["Про нас", "Вакансії"]
 
@@ -31,7 +32,7 @@ const CompanyDetails: FC = () => {
     const params = useSearchParams()
     const router = useRouter()
 
-    const {data, isLoading, error, refetch} = useFetch(GET, `companies/${params.id}`);
+    const {data, isLoading, error, refetch} = useFetch<CompanyById>(GET, `companies/${params.id}`);
 
     const [activeTab, setActiveTab] = useState(tabs[0]);
     const [refreshing, setRefreshing] = useState(false);
@@ -40,18 +41,14 @@ const CompanyDetails: FC = () => {
         setRefreshing(true);
         refetch()
         setRefreshing(false)
-    }, [])
+    }, [refetch])
 
     const DisplayTabContent = () => {
         switch (activeTab) {
             case "Про нас":
-                return (
-                    // @ts-ignore
-                    <About info={data?.description ?? "Немає даних"} text={"Дані про компанію:"}/>
-                )
+                return <About info={data?.description ?? "Немає даних"} text={"Дані про компанію:"}/>
 
             case "Вакансії":
-                //     @ts-ignore
                 return <VacancyContainer data={data?.vacancies ?? []}/>
 
             default:
@@ -77,26 +74,23 @@ const CompanyDetails: FC = () => {
                 }}
             />
 
-            <ScrollView showsVerticalScrollIndicator={false}
-                        refreshControl={
-                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
             >
                 {isLoading ? (
                     <ActivityIndicator size='large' color={COLORS.primary}/>
                 ) : error ? (
                     <Text>Щось пішло не так</Text>
-                ) : data.length === 0 ? (
+                ) : !data ? (
                     <Text>Немає даних</Text>
                 ) : (
                     <View style={{padding: SIZES.medium, paddingBottom: 100}}>
-                        {/*<Company data={data}/>*/}
                         <View style={styles.container}>
                             <View style={styles.logoBox}>
                                 <Image
                                     source={{
-                                        // @ts-ignore
                                         uri: checkImageURL(data?.logo)
-                                            // @ts-ignore
                                             ? data?.logo
                                             : `https://t4.ftcdn.net/jpg/05/05/61/73/360_F_505617309_NN1CW7diNmGXJfMicpY9eXHKV4sqzO5H.jpg`
                                     }}
@@ -105,7 +99,6 @@ const CompanyDetails: FC = () => {
                             </View>
 
                             <View style={styles.companyInfoBox}>
-                                {/*@ts-ignore*/}
                                 <Text style={styles.companyName}>{data?.name ?? 'Ім\'я не зазначено'}</Text>
                             </View>
                         </View>

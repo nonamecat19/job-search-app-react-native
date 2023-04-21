@@ -6,28 +6,10 @@ import {COLORS, icons} from "../../../constants"
 import {checkImageURL} from "../../../utils"
 import {InfoType} from "../../../types/vacancy";
 import {useRouter} from "expo-router";
+import {CompanyType} from "../../../types/employer";
 
 interface Props {
-    data: {
-        title: string
-        company: {
-            name: string
-            logo: string
-            id: string
-        }
-        description: string
-        location?: string
-        minSalary?: number
-        maxSalary?: number
-        requirements: string[]
-        offers: string[]
-        date: Date
-        category: InfoType
-        employmentType: InfoType
-        tags: InfoType[]
-        available: boolean
-        id: string
-    }
+    data: CompanyType
 }
 
 const Company: FC<Props> = ({data}) => {

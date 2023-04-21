@@ -1,16 +1,22 @@
 import {useState, useEffect} from "react"
-import axios from "axios"
+import axios, {AxiosResponse} from "axios"
 import {RequestMethod, RequestPath} from "../types/request";
 import {GET} from "../constants/requests";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+type useFetchReturn<T> = {
+    data: T
+    isLoading: boolean
+    error: string | null
+    refetch: () => void
+}
 
-const useFetch = (method: RequestMethod, path: RequestPath, params?: any) => {
-    const [data, setData] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState(null)
+const useFetch = <T>(method: RequestMethod, path: RequestPath, params?: any): useFetchReturn<T> => {
+    const [data, setData] = useState<any>([])
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
 
-    let myPath = path
+    let myPath: string = path
 
     if (params && method === GET) {
         myPath += '?' + new URLSearchParams(params).toString()
@@ -21,16 +27,14 @@ const useFetch = (method: RequestMethod, path: RequestPath, params?: any) => {
         url: `https://job-search-app.cyclic.app/${myPath}`
     }
 
-    const fetchData = async () => {
+    const fetchData = async (): Promise<void> => {
         setIsLoading(true)
-
         try {
-            const token = await AsyncStorage.getItem('@authToken')
+            const token: string = await AsyncStorage.getItem('@authToken')
             options.headers = {
                 "Authorization": `Bearer ${token}`
             }
-
-            const response = await axios.request(options)
+            const response: AxiosResponse = await axios.request(options)
             setData(response.data)
             setIsLoading(false)
         } catch (error) {
@@ -39,18 +43,21 @@ const useFetch = (method: RequestMethod, path: RequestPath, params?: any) => {
         } finally {
             setIsLoading(false)
         }
-    };
+    }
 
     useEffect(() => {
-        fetchData()
+        fetchData().then(() => {})
     }, [])
 
-    const refetch = () => {
+    const refetch = (): void => {
         setIsLoading(true);
-        fetchData()
-    };
+        fetchData().then(() => {})
+    }
 
     return {data, isLoading, error, refetch};
 }
 
 export default useFetch
+
+
+

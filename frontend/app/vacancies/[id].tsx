@@ -31,7 +31,7 @@ const JobDetails: FC = () => {
     const params = useSearchParams();
     const router = useRouter();
 
-    const vacancyData = useFetch(GET, `vacancies/${params.id}`)
+    const {data, refetch, error, isLoading} = useFetch<Company>(GET, `vacancies/${params.id}`)
 
 
     const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -39,9 +39,9 @@ const JobDetails: FC = () => {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        vacancyData.refetch()
+        refetch()
         setRefreshing(false)
-    }, [])
+    }, [refetch])
 
 
     const zustandData = useStore(state => state.data)
@@ -99,28 +99,25 @@ const JobDetails: FC = () => {
                 showsVerticalScrollIndicator={false}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
             >
-                {vacancyData.isLoading ? (
-                    <ActivityIndicator size='large' color={COLORS.primary}/>
-                ) : vacancyData.error ? (
-                    <Text>Щось пішло не так</Text>
-                ) : vacancyData.data.length === 0 ? (
-                    <Text>Немає даних</Text>
-                ) : (
-                    <View style={{padding: SIZES.medium, paddingBottom: 100}}>
-                        {/*@ts-ignore*/}
-                        <Company data={vacancyData.data}/>
-                        <JobTabs
-                            tabs={tabs}
-                            activeTab={activeTab}
-                            setActiveTab={setActiveTab}
-                        />
+                {isLoading
+                    ? <ActivityIndicator size='large' color={COLORS.primary}/>
+                    : error
+                        ? <Text>Щось пішло не так</Text>
+                        : !data
+                            ? <Text>Немає даних</Text>
+                            : <View style={{padding: SIZES.medium, paddingBottom: 100}}>
+                                <Company data={data}/>
+                                <JobTabs
+                                    tabs={tabs}
+                                    activeTab={activeTab}
+                                    setActiveTab={setActiveTab}
+                                />
 
-                        <DisplayTabContent/>
-                    </View>
-                )}
+                                <DisplayTabContent/>
+                            </View>
+                }
             </ScrollView>
             {zustandData?.role === WORKER && <JobFooter/>}
-
 
         </SafeAreaView>
     );

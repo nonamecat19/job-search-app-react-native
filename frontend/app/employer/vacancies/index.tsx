@@ -6,13 +6,14 @@ import {ScreenHeaderBtn} from "../../../components";
 import useFetch from "../../../hook/useFetch";
 import {GET} from "../../../constants/requests";
 import EmployerVacancyContainer from "../../../components/common/employerVacancyContainer";
+import {EmployerVacancies} from "../../../types/employer";
 
 
 const Vacancies: FC = () => {
 
     const router = useRouter()
 
-    const {data, isLoading, refetch} = useFetch(GET, 'companies/vacancies')
+    const {data, isLoading, refetch} = useFetch<EmployerVacancies[]>(GET, 'companies/vacancies')
 
     const [refreshing, setRefreshing] = useState(false);
 
