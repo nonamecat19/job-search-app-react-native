@@ -8,12 +8,14 @@ import {GET} from "../constants/requests"
 import JobTiles from "../components/home/JobTiles/JobTiles"
 import Welcome from "../components/home/welcome/Welcome";
 import useStore from "../store/store";
+import FetchDataTemplate from "../components/common/FetchDataTemplate";
+import {Recommendations} from "../types/vacancy";
 
 const Home = () => {
     const router = useRouter()
     const [searchTerm, setSearchTerm] = useState<string>("")
 
-    let recommend = useFetch<any>(GET, 'vacancies/recommendations')
+    let recommend = useFetch<Recommendations>(GET, 'vacancies/recommendations')
     const update = useStore(state => state.updateData)
     useEffect(() => {
         update()
@@ -25,9 +27,9 @@ const Home = () => {
         router.push(zustandData?.role ? `/${zustandData.role}/profile` : `/auth/login`)
     }
 
-    const [refreshing, setRefreshing] = useState(false);
+    const [refreshing, setRefreshing] = useState<boolean>(false);
 
-    const onRefresh = useCallback(() => {
+    const onRefresh = useCallback((): void => {
         setRefreshing(true);
         recommend.refetch()
         setRefreshing(false)
@@ -54,37 +56,35 @@ const Home = () => {
                     headerTitle: "",
                 }}
             />
-            <SafeAreaView style={{flex: 1}}>
-                <View
-                    style={{
-                        flex: 1,
-                        padding: SIZES.medium,
-                    }}
-                >
-                    <FlatList
-                        ListHeaderComponent={
-                            <Welcome
-                                searchTerm={searchTerm}
-                                setSearchTerm={setSearchTerm}
-                                handleClick={() => {
-                                    if (searchTerm) {
-                                        router.push(`/search/${searchTerm}?`)
-                                    }
-                                }}
-                            />
+            <View
+                style={{
+                    flex: 1,
+                    padding: SIZES.medium,
+                }}
+            >
+                <Welcome
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    handleClick={() => {
+                        if (searchTerm) {
+                            router.push(`/search/${searchTerm}?`)
                         }
+                    }}
+                />
+                <FetchDataTemplate isLoading={recommend.isLoading} refetch={recommend.refetch}>
+                    <FlatList
                         data={recommend.data}
                         renderItem={({item}) => (
-                            !recommend.isLoading && item.length > 0
-                            && <JobTiles
+                            item.length > 0 &&
+                            <JobTiles
                                 data={item}
                                 title={item[0].category.name}
                             />
                         )}
                         keyExtractor={() => Math.random().toString()}
                     />
-                </View>
-            </SafeAreaView>
+                </FetchDataTemplate>
+            </View>
         </ScrollView>
     )
 }

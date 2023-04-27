@@ -5,12 +5,16 @@ import useFetch from "../../../../hook/useFetch"
 import {GET} from "../../../../constants/requests"
 import {COLORS, icons} from "../../../../constants"
 import {ScreenHeaderBtn} from "../../../../components"
+import moment from "moment/moment";
+import {create} from "zustand";
+import {ApplicationFetchData} from "../../../../types/applications";
+import ApplicationElement from "../../../../components/common/applicationElement";
 
 const Applications: FC = () => {
     const router = useRouter()
     const params = useSearchParams()
 
-    const {data, isLoading, refetch, error} = useFetch<FetchData[]>(GET, `applications/vacancy/${params.id}`)
+    const {data, isLoading, refetch, error} = useFetch<ApplicationFetchData[]>(GET, `applications/vacancy/${params.id}`)
 
     const [refreshing, setRefreshing] = useState(false)
 
@@ -55,7 +59,7 @@ const Applications: FC = () => {
                     : (
                         <FlatList
                             data={data}
-                            renderItem={({item}) => <ApplicationElement data={item}/>}
+                            renderItem={({item}) => <ApplicationElement data={item} refetch={refetch}/>}
                             keyExtractor={(item) => item.id}
                         />
                     )
@@ -65,35 +69,3 @@ const Applications: FC = () => {
     )
 }
 export default Applications
-
-type FetchData = {
-    vacancy: string
-    worker: {
-        user: {
-            firstName: string
-            lastName: string
-            email: string
-            id: string
-        }
-        id: string
-    }
-    date: Date
-    status: string
-    id: string
-}
-
-interface ApplicationElementProps {
-    data: FetchData
-}
-
-const ApplicationElement: FC<ApplicationElementProps> = ({data}) => {
-
-
-    return (
-        <View>
-            <Text>
-                {JSON.stringify(data)}
-            </Text>
-        </View>
-    )
-}

@@ -18,3 +18,19 @@ export type ApplicationFetch = {
     isLoading: boolean
     error: string
 }
+
+export type ApplicationFetchData = {
+    vacancy: string
+    worker: {
+        user: {
+            firstName: string
+            lastName: string
+            email: string
+            id: string
+        }
+        id: string
+    }
+    date: Date
+    status: string
+    id: string
+}

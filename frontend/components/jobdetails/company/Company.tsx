@@ -19,11 +19,12 @@ const Company: FC<Props> = ({data}) => {
         return null
     }
 
-    return (
-        <View
-            style={styles.container}
+    if (!data.title) {
+        return (<></>)
+    }
 
-        >
+    return (
+        <View style={styles.container}>
             <TouchableOpacity
                 style={styles.logoBox}
                   onPress={() => router.push(`/company/${data.company.id}`)}>

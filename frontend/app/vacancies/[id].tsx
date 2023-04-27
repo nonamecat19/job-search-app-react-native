@@ -22,8 +22,8 @@ import {GET} from "../../constants/requests";
 import {FC} from "react"
 import Company from "../../components/jobdetails/company/Company";
 import useStore from "../../store/store";
-import {request} from "../../utils";
 import {WORKER} from "../../constants/roles";
+import {CompanyType} from "../../types/employer";
 
 const tabs = ["Про нас", "Ми пропонуємо", "Вимоги"];
 
@@ -31,7 +31,7 @@ const JobDetails: FC = () => {
     const params = useSearchParams();
     const router = useRouter();
 
-    const {data, refetch, error, isLoading} = useFetch<Company>(GET, `vacancies/${params.id}`)
+    const {data, refetch, error, isLoading} = useFetch<CompanyType>(GET, `vacancies/${params.id}`)
 
 
     const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -52,23 +52,20 @@ const JobDetails: FC = () => {
                 return (
                     <Specifics
                         title='Ми пропонуємо'
-                        // @ts-ignore
-                        points={vacancyData.data.offers}
+                        points={data.offers}
                     />
                 );
 
             case "Про нас":
                 return (
-                    // @ts-ignore
-                    <About info={vacancyData.data.description ?? "No data provided"}/>
+                    <About info={data.description ?? "No data provided"}/>
                 );
 
             case "Вимоги":
                 return (
                     <Specifics
                         title='Вимоги'
-                        // @ts-ignore
-                        points={vacancyData.data.requirements ?? ["N/A"]}
+                        points={data.requirements ?? ["N/A"]}
                     />
                 );
 

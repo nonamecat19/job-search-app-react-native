@@ -9,6 +9,7 @@ import {request} from "../../utils";
 import {GET, POST} from "../../constants/requests";
 import {Dropdown} from 'react-native-element-dropdown';
 import {AddVacancyType} from "../../types/vacancy";
+import ScreenTemplate from "../../components/common/screenTemplate";
 
 
 const Add: FC = () => {
@@ -82,21 +83,7 @@ const Add: FC = () => {
 
 
     return (
-        <SafeAreaView>
-            <Stack.Screen
-                options={{
-                    headerStyle: {backgroundColor: COLORS.lightWhite},
-                    headerShadowVisible: false,
-                    headerLeft: () => (
-                        <ScreenHeaderBtn
-                            iconUrl={icons.left}
-                            dimension='60%'
-                            handlePress={() => router.back()}
-                        />
-                    ),
-                    headerTitle: "",
-                }}
-            />
+        <ScreenTemplate>
             <ScrollView
                 style={{
                     padding: 20,
@@ -143,9 +130,7 @@ const Add: FC = () => {
                 </TouchableOpacity>
 
             </ScrollView>
-
-
-        </SafeAreaView>
+        </ScreenTemplate>
     )
 }
 

@@ -12,16 +12,20 @@ interface Props {
 const EmployerVacancyElement: FC<Props> = ({data}) => {
 
     const router = useRouter()
-    const infoHandler = () => {
+    const infoHandler = (): void => {
         router.push(`/employer/vacancies/applications/${data.id}`)
     }
 
-    const editHandler = () => {
+    const editHandler = (): void => {
         router.push('')
+
+        //TODO
     }
 
-    const closeHandler = () => {
+    const closeHandler = (): void => {
         // request()
+
+        //TODO
     }
 
     return (
@@ -59,8 +63,8 @@ const EmployerVacancyElement: FC<Props> = ({data}) => {
                 }}
             >
                 <ElementButton onPress={infoHandler} text={'Відгуки'}/>
-                <ElementButton onPress={editHandler} text={'Редагувати'} color={COLORS.yellow}/>
-                {data.available && <ElementButton onPress={closeHandler} text={'Закрити'} color={COLORS.tertiary}/>}
+                <ElementButton onPress={editHandler} text={'Редагувати'}/>
+                {data.available && <ElementButton onPress={closeHandler} text={'Закрити'}/>}
 
             </View>
 
@@ -81,13 +85,19 @@ const ElementButton: FC<ElementButtonProps> = ({onPress, text, color}) => {
         <TouchableOpacity
             style={{
                 paddingVertical: 4,
-                paddingHorizontal: 10,
+                // paddingHorizontal: 10,
                 backgroundColor: color ?? COLORS.primary,
-                borderRadius: 10
+                borderRadius: 10,
+                width: '32%'
             }}
             onPress={onPress}
         >
-            <Text style={{color: COLORS.white}}>
+            <Text
+                style={{
+                    color: COLORS.white,
+                    textAlign: 'center'
+                }}
+            >
                 {text}
             </Text>
         </TouchableOpacity>

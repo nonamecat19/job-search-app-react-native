@@ -37,3 +37,21 @@ export type TitleInfoType = {
     title: string
     id: string
 }
+
+export type VacancyRecommendations = {
+    title: string
+    company: {
+        name: string
+        logo?: string
+        id: string
+    }
+    location?: string
+    minSalary?: number
+    maxSalary?: number
+    category: InfoType
+    id: string
+}
+
+export type CategoryRecommendations = VacancyRecommendations[]
+
+export type Recommendations = CategoryRecommendations[]

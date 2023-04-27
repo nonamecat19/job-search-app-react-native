@@ -5,6 +5,7 @@ import {COLORS, icons} from "../../constants";
 import {ScreenHeaderBtn} from "../../components";
 import useStore from "../../store/store";
 import MenuItem from "../../components/common/menuItem";
+import ScreenTemplate from "../../components/common/screenTemplate";
 
 
 const Profile: FC = () => {
@@ -18,33 +19,13 @@ const Profile: FC = () => {
     }
 
     return (
-        <View style={{
-            backgroundColor: COLORS.lightWhite
-        }}>
-            <Stack.Screen
-                options={{
-                    headerStyle: {
-                        backgroundColor: COLORS.lightWhite
-                    },
-                    headerShadowVisible: false,
-                    headerLeft: () => (
-                        <ScreenHeaderBtn
-                            iconUrl={icons.left}
-                            dimension='60%'
-                            handlePress={() => router.back()}
-                        />
-                    ),
-                    headerTitle: "",
-                }}
-            />
-
+        <ScreenTemplate>
             <MenuItem name={'Створити вакансію'} path={'employer/add'}/>
             <MenuItem name={'Мої вакансії'} path={'employer/vacancies'}/>
             <MenuItem name={'Мої відгуки'} path={'employer/applications'}/>
             <MenuItem name={'Налаштування'} path={'employer/settings'}/>
             <MenuItem name={'Вийти'} func={logoutHandler}/>
-
-        </View>
+        </ScreenTemplate>
     )
 }
 export default Profile

@@ -7,9 +7,11 @@ import {GET, PATCH} from "../../constants/requests";
 import AppTextInput from "../../components/common/appTextInput";
 import {request} from "../../utils";
 import useStore from "../../store/store";
+import ScreenTemplate from "../../components/common/screenTemplate";
+import {Router} from "express";
 
 const Settings: FC = () => {
-    const router = useRouter()
+    const router: Router = useRouter()
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
     useEffect(() => {
@@ -55,23 +57,7 @@ const Settings: FC = () => {
     }
 
     return (
-        <SafeAreaView>
-            <Stack.Screen
-                options={{
-                    headerStyle: {
-                        backgroundColor: COLORS.lightWhite
-                    },
-                    headerShadowVisible: false,
-                    headerLeft: () => (
-                        <ScreenHeaderBtn
-                            iconUrl={icons.left}
-                            dimension='60%'
-                            handlePress={() => router.back()}
-                        />
-                    ),
-                    headerTitle: "",
-                }}
-            />
+        <ScreenTemplate>
             <ScrollView style={{
                 padding: 30
             }}>
@@ -103,8 +89,7 @@ const Settings: FC = () => {
                 }
 
             </ScrollView>
-        </SafeAreaView>
-
+        </ScreenTemplate>
     )
 }
 export default Settings
