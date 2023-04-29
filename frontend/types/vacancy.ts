@@ -26,6 +26,7 @@ export type AddVacancyType = {
     tags: string[]
     minSalary?: number
     maxSalary?: number
+    experience: number
 }
 
 export type InfoType = {

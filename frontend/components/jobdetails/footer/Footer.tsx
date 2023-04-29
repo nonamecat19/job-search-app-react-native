@@ -7,6 +7,8 @@ import {request} from "../../../utils"
 import {DELETE, GET, POST} from "../../../constants/requests"
 import {useSearchParams} from "expo-router"
 import useFetch from "../../../hook/useFetch"
+import {ResumeType} from "../../../types/resume";
+import moment from "moment";
 
 interface Props {
 
@@ -16,6 +18,7 @@ const Footer: FC<Props> = () => {
     const {id} = useSearchParams()
 
     const inSavesRequest = useFetch(GET, `workers/inSaves/${id}`)
+    const resumes = useFetch<ResumeType[]>(GET, 'workers/myResumes')
 
     const saveHandler = async (): Promise<void> => {
         if (inSavesRequest.isLoading) {
@@ -30,12 +33,32 @@ const Footer: FC<Props> = () => {
     }
 
     const submitHandler = async (): Promise<void> => {
-        request(POST, `applications/${id}`)
+        Alert.alert(
+            ' sdaf',
+            'sdaf',
+            [
+                {
+                    text: 'Без резюме',
+                    onPress: submitRequest
+                },
+                ...resumes.data.map((item) => ({
+                        text: moment(item.date).format('D/M hh:mm').toString(),
+                        onPress: () => submitRequest({resume: item.id})
+                    })
+                )
+            ],
+            {cancelable: true}
+        )
+    }
+
+    const submitRequest = (resume?): void => {
+
+        request(POST, `applications/${id}`, resume ?? {})
             .then(() => {
                 Alert.alert('Успіх', 'Заявка усппішно подана! Очікуйте на відповідь від роботодавця.')
             })
             .catch((error) => {
-                Alert.alert(error)
+                Alert.alert(error.message)
             })
     }
 
@@ -55,13 +78,16 @@ const Footer: FC<Props> = () => {
                         />
                     </TouchableOpacity>
             }
+            {
+                resumes.isLoading
+                    ? <TouchableOpacity style={{...styles.applyBtn, backgroundColor: COLORS.white}}>
+                        <ActivityIndicator color={COLORS.primary} size={'large'}/>
+                    </TouchableOpacity>
+                    : <TouchableOpacity style={styles.applyBtn} onPress={submitHandler}>
+                        <Text style={styles.applyBtnText}>Подати заявку</Text>
+                    </TouchableOpacity>
+            }
 
-            <TouchableOpacity
-                style={styles.applyBtn}
-                onPress={submitHandler}
-            >
-                <Text style={styles.applyBtnText}>Подати заявку</Text>
-            </TouchableOpacity>
         </View>
     )
 }

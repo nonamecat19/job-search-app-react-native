@@ -9,42 +9,21 @@ import {COLORS} from "../../constants";
 import {request} from "../../utils";
 import DocumentPicker from 'react-native-document-picker';
 import * as ImagePicker from 'expo-image-picker';
+import ResumeList from "../../components/common/resumeList";
 
 const Resumes: FC = () => {
 
     const {data, isLoading, refetch, error} = useFetch<ResumeType[]>(GET, 'workers/myResumes')
 
-    const [image, setImage] = useState(null)
-
-    const [message, setMessage] = useState<string>('')
     const addResumeHandler = async (): Promise<void> => {
-
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            quality: 1,
-        })
-
-        if (result.canceled)
-            return
-
-        console.log(result)
-
-        setImage(result.assets[0].uri)
-
-        let requestData = {
-            filename: result.assets[0]
-        }
-
-        request(POST, 'resumes/add', requestData)
-            .then((response) => {
-                Alert.alert('Успіх!' + JSON.stringify(response))
-                setMessage(JSON.stringify(response))
-                // refetch()
-            })
-            .catch((error) => {
-                Alert.alert('Помилка ' + error.message)
-                setMessage(JSON.stringify(error))
-            })
+        // request(POST, 'resumes/add')
+        //     .then((response) => {
+        //         Alert.alert('Успіх!' + JSON.stringify(response))
+        //         // refetch()
+        //     })
+        //     .catch((error) => {
+        //         Alert.alert('Помилка ' + error.message)
+        //     })
     }
 
     return (
@@ -71,17 +50,8 @@ const Resumes: FC = () => {
                         Додати нове резюме
                     </Text>
                 </TouchableOpacity>
-                <Text>
-                    {/*{JSON.stringify(data)}*/}
-                    {message}
-                </Text>
-                <FlatList
-                    data={data}
-                    renderItem={({item}) => <Text>{JSON.stringify(item)}</Text>}
-                    keyExtractor={(item) => item.id}
-                />
+                <ResumeList data={data}/>
             </FetchDataTemplate>
-
         </ScreenTemplate>
     )
 }

@@ -14,6 +14,7 @@
     "expo": "^48.0.0",
     "expo-constants": "~14.2.1",
     "expo-font": "~11.1.1",
+    "expo-image-picker": "~14.1.1",
     "expo-linking": "~4.0.1",
     "expo-router": "^1.0.0-rc1",
     "expo-splash-screen": "~0.18.1",
@@ -21,6 +22,7 @@
     "expo-updates": "~0.16.3",
     "moment": "^2.29.4",
     "react": "18.2.0",
+    "react-charts": "^3.0.0-beta.54",
     "react-dom": "18.2.0",
     "react-native": "0.71.6",
     "react-native-document-picker": "^8.2.0",
@@ -34,8 +36,7 @@
     "react-native-switch-selector": "^2.3.0",
     "react-native-web": "~0.18.11",
     "typescript": "^4.9.4",
-    "zustand": "^4.3.7",
-    "expo-image-picker": "~14.1.1"
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -14,6 +14,7 @@ import {Recommendations} from "../types/vacancy";
 const Home = () => {
     const router = useRouter()
     const [searchTerm, setSearchTerm] = useState<string>("")
+    const [menuLock, setMenuLock] = useState<boolean>(true)
 
     let recommend = useFetch<Recommendations>(GET, 'vacancies/recommendations')
     const update = useStore(state => state.updateData)

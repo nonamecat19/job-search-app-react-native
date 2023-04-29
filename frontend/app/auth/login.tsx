@@ -53,6 +53,7 @@ const Login: FC<Props> = () => {
                     request(POST, 'workers', dataRegister)
                         .then((res) => {
                             Alert.alert('Успіх')
+                            setIsRegister(false)
                         })
                         .catch((error) => {
                             Alert.alert('Помилка! ' + error)
@@ -65,6 +66,7 @@ const Login: FC<Props> = () => {
                     request(POST, 'companies', dataRegister)
                         .then((res) => {
                             Alert.alert('Успіх')
+                            setIsRegister(false)
                         })
                         .catch((error) => {
                             Alert.alert('Помилка! ' + error)

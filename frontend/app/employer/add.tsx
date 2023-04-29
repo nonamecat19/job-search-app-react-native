@@ -18,7 +18,7 @@ const Add: FC = () => {
     const [loading, setIsLoading] = useState<boolean>(true)
 
     const [tags, setTags] = useState<TagType[]>([])
-    const [currentTag, setCurrentTag] = useState<any>([])
+    const [currentTag, setCurrentTag] = useState<any>(null)
 
     const [categories, setCategories] = useState<any[]>([])
     const [currentCategory, setCurrentCategory] = useState<any>([])
@@ -31,6 +31,7 @@ const Add: FC = () => {
     const [requirements, setRequirements] = useState<string>('')
     const [offers, setOffers] = useState<string>('')
     const [location, setLocation] = useState<string>('')
+    const [experience, setExperience] = useState<string>('')
     const [minSalary, setMinSalary] = useState<string>('')
     const [maxSalary, setMaxSalary] = useState<string>('')
 
@@ -51,9 +52,6 @@ const Add: FC = () => {
         setIsLoading(false)
     }, [])
 
-
-
-
     const submitHandler = async (): Promise<void> => {
         let data: AddVacancyType = {
             title: name,
@@ -62,7 +60,8 @@ const Add: FC = () => {
             offers: offers.split('|'),
             category: currentCategory,
             employmentType: currentEmploymentTypes,
-            tags: [currentTag],
+            tags: currentTag ? [currentTag] : [],
+            experience: parseInt(experience) > 0 ? parseInt(experience) : 0
         }
         if (location.length > 0) {
             data.location = location
@@ -74,13 +73,13 @@ const Add: FC = () => {
         request(POST, 'vacancies', data)
             .then((data) => {
                 Alert.alert('Успіх')
+                console.log('DATA' + JSON.stringify(data))
                 router.push('/home')
             })
             .catch((error) => {
-                Alert.alert(error)
+                Alert.alert(error.message)
             })
     }
-
 
     return (
         <ScreenTemplate>
@@ -109,6 +108,8 @@ const Add: FC = () => {
                 <AppTextInput value={minSalary} onChangeText={text => setMinSalary(text)}/>
                 <Text>Максимальна заробітня плата</Text>
                 <AppTextInput value={maxSalary} onChangeText={text => setMaxSalary(text)}/>
+                <Text>К-сть років досвіду</Text>
+                <AppTextInput value={experience} onChangeText={text => setExperience(text)}/>
 
                 <TouchableOpacity
                     style={{
