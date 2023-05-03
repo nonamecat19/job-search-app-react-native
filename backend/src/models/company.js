@@ -11,13 +11,13 @@ const CompanySchema = new Schema({
         type: String,
         trim: true,
     },
-    icon: {
+    logo: {
         type: String
     },
     vacancies: {
         type: [Schema.Types.ObjectId],
         ref: VacancyModel
-    }
+    },
 })
 
 CompanySchema.set('toJSON', {

@@ -41,9 +41,6 @@ const JobTiles: FC<Props> = ({data, title}) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>{title}</Text>
-        <TouchableOpacity>
-          <Text style={styles.headerBtn}>Показати всі</Text>
-        </TouchableOpacity>
       </View>
 
       <View style={styles.cardsContainer}>

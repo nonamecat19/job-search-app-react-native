@@ -23,7 +23,7 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: true,
-        minLength: 7,
+        minLength: 6,
         trim: true,
         validate(value) {
             if (validator.contains(value, "password")) {
@@ -34,7 +34,6 @@ const UserSchema = new Schema({
     email: {
         type: String,
         required: true,
-        lowercase: true,
         unique: true,
         validate(value) {
             if (!validator.isEmail(value)) {
@@ -49,15 +48,18 @@ const UserSchema = new Schema({
     },
     admin: {
         type: Schema.Types.ObjectId,
-        ref: AdminModel
+        ref: AdminModel,
+        default: null
     },
     worker: {
         type: Schema.Types.ObjectId,
-        ref: WorkerModel
+        ref: WorkerModel,
+        default: null
     },
     company: {
         type: Schema.Types.ObjectId,
-        ref: CompanyModel
+        ref: CompanyModel,
+        default: null
     },
     tokens: [{
         token: {
@@ -89,7 +91,9 @@ UserSchema.statics.findOneByCredentials = async (email, password) => {
 UserSchema.methods.generateAuthToken = async function() {
     const user = this
     const token = jwt.sign({
-        _id: user._id.toString()
+        _id: user._id.toString(),
+        email: user.email,
+        password: user.password,
     }, JWT_SECRET)
     user.tokens = user.tokens.concat({token})
     await user.save()

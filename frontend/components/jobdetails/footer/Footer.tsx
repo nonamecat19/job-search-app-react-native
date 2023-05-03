@@ -11,10 +11,10 @@ import {ResumeType} from "../../../types/resume";
 import moment from "moment";
 
 interface Props {
-
+    available: boolean
 }
 
-const Footer: FC<Props> = () => {
+const Footer: FC<Props> = ({available}) => {
     const {id} = useSearchParams()
 
     const inSavesRequest = useFetch(GET, `workers/inSaves/${id}`)
@@ -34,8 +34,8 @@ const Footer: FC<Props> = () => {
 
     const submitHandler = async (): Promise<void> => {
         Alert.alert(
-            ' sdaf',
-            'sdaf',
+            ' Оберіть резюме',
+            '',
             [
                 {
                     text: 'Без резюме',
@@ -78,17 +78,38 @@ const Footer: FC<Props> = () => {
                         />
                     </TouchableOpacity>
             }
-            {
-                resumes.isLoading
-                    ? <TouchableOpacity style={{...styles.applyBtn, backgroundColor: COLORS.white}}>
-                        <ActivityIndicator color={COLORS.primary} size={'large'}/>
-                    </TouchableOpacity>
-                    : <TouchableOpacity style={styles.applyBtn} onPress={submitHandler}>
-                        <Text style={styles.applyBtnText}>Подати заявку</Text>
-                    </TouchableOpacity>
-            }
+            <FooterButton available={available} isLoading={resumes.isLoading} submitHandler={submitHandler}/>
 
         </View>
+    )
+}
+
+interface IFooterButtonProps {
+    available: boolean
+    isLoading: boolean
+    submitHandler: () => void
+}
+const FooterButton: FC<IFooterButtonProps> = ({available, isLoading, submitHandler}) => {
+    if (isLoading) {
+        return (
+            <TouchableOpacity style={{...styles.applyBtn, backgroundColor: COLORS.white}}>
+                <ActivityIndicator color={COLORS.primary} size={'large'}/>
+            </TouchableOpacity>
+        )
+    }
+
+    if (available) {
+        return (
+            <TouchableOpacity style={styles.applyBtn} onPress={submitHandler}>
+                <Text style={styles.applyBtnText}>Подати заявку</Text>
+            </TouchableOpacity>
+        )
+    }
+
+    return (
+        <TouchableOpacity style={styles.applyBtn}>
+            <Text style={styles.applyBtnText}>Вакансія закрита</Text>
+        </TouchableOpacity>
     )
 }
 

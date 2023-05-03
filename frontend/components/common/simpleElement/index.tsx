@@ -10,8 +10,6 @@ interface Props {
 }
 const SimpleElement: FC<Props> = ({data, deleteFunc}) => {
 
-
-
     return (
         <View
             style={{

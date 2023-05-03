@@ -1,49 +1,48 @@
 const Resume = require("../../models/resume")
+const Worker = require("../../models/worker")
 const express = require("express")
-const path = require("path")
-// const multer = require('multer')
-//
-// const uploadDirectory = 'tmp/'
-//
-// const upload = multer({
-//     dest: uploadDirectory,
-//     fileFilter: (req, file, callback) => {
-//         let ext = path.extname(file.originalname);
-//         if (ext !== '.pdf') {
-//             return callback(new Error('Only pdf allowed'))
-//         }
-//         callback(null, true)
-//     }
-// }).single('resume')
+const {initializeApp}  = require("firebase/app")
+const {getStorage, ref, getDownloadURL, uploadBytesResumable}  = require("firebase/storage")
+const firebaseConfig = require("./../../config/firebase")
+const {WORKER} = require("../../constansts/roles")
+const auth = require("../../middleware/auth")
+const {upload} = require("../../middleware/upload");
+const {giveCurrentDateTime} = require("../../utils/utils");
 
+initializeApp(firebaseConfig)
+const storage = getStorage()
 
 const router = express.Router()
 
-router.get("/", async (req, res) => {
+router.post("/add", auth(WORKER), upload, async (req, res) => {
     try {
-        const users = await Resume.find({})
-        res.status(200).send(users)
+        const fileName = `${giveCurrentDateTime()}_${Math.random()}.pdf`
+        const filePath = `resumes/${fileName}`
+        const storageRef = ref(storage, filePath)
+
+        const snapshot = await uploadBytesResumable(storageRef, req.file.buffer)
+        const downloadUrl = await getDownloadURL(snapshot.ref)
+
+        const resume = new Resume({
+            file: fileName,
+            downloadURL: downloadUrl,
+            date: Date.now()
+        })
+        await resume.save()
+
+        const worker = await Worker.findById(req.user.worker)
+        worker.resumes.push(resume._id)
+        worker.save()
+
+        res.status(200).send({
+            worker: worker.resumes,
+            resume
+        })
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).send(error.message)
     }
 })
-//
-// router.post("/", upload, async (req, res) => {
-//     if (!req.body) {
-//         res.status(400).send()
-//     }
-//
-//     let resumeData = req.body
-//     const newResume = new Resume(resumeData)
-//
-//     try {
-//         // await newResume.save()
-//         res.status(200).send(newResume)
-//     } catch (error) {
-//         res.status(400).send(error.message)
-//     }
-// })
-//
+
 // router.get("/download/:id", async (req, res) => {
 //
 //     let fileName = req.params.id

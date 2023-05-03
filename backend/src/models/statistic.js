@@ -2,33 +2,35 @@ const {Schema, model} = require("mongoose")
 const {StatisticModel} = require("../constansts/models")
 
 const StatisticSchema = new Schema({
-    numberOfCompanies: {
+    companies: {
         type: Number,
         required: true
     },
-    numberOfAdmins: {
+    admins: {
         type: Number,
         required: true
     },
-    numberOfWorkers: {
+    workers: {
         type: Number,
         required: true
     },
-    vacancyLocation: {
-        type: [{
-            location: String,
-            value: Number
-        }],
+    vacancies: {
+        type: Number,
         required: true
     },
-    experience: {
-        type: [{
-            years: Number,
-            value: Number
-        }],
+    vacanciesWithNoExperience: {
+        type: Number,
         required: true
     },
     resolvedApplications: {
+        type: Number,
+        required: true
+    },
+    sentApplications: {
+        type: Number,
+        required: true
+    },
+    checkedApplications: {
         type: Number,
         required: true
     },
@@ -39,7 +41,7 @@ const StatisticSchema = new Schema({
     date: {
         type: Number,
         required: true
-    },
+    }
 })
 
 StatisticSchema.set('toJSON', {

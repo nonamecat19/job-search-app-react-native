@@ -27,33 +27,41 @@ const VacancySchema = new Schema({
         type: Number
     },
     experience: {
-        type: Number
+        type: Number,
+        required: true
     },
     requirements: {
-        type: [String]
+        type: [String],
+        required: [],
+        default: []
     },
     offers: {
-        type: [String]
+        type: [String],
+        required: [],
+        default: []
     },
     date: {
         type: Date,
         required: true
     },
-    categories: {
-        type: [Schema.Types.ObjectId],
-        ref: CategoryModel
+    category: {
+        type: Schema.Types.ObjectId,
+        ref: CategoryModel,
+        required: true
     },
-    employmentTypes: {
-        type: [Schema.Types.ObjectId],
-        ref: EmploymentTypeModel
+    employmentType: {
+        type: Schema.Types.ObjectId,
+        ref: EmploymentTypeModel,
+        required: true
     },
     tags: {
         type: [Schema.Types.ObjectId],
-        ref: TagModel
+        ref: TagModel,
+        required: true,
+        default: []
     },
     available: {
         type: Boolean,
-        required: true,
         default: true
     }
 })

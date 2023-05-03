@@ -4,6 +4,7 @@ const {CategoryModel} = require("../constansts/models")
 const CategorySchema = new Schema({
     name: {
         type: String,
+        unique: true,
         required: true
     }
 })

@@ -1,9 +1,10 @@
 import {FC} from "react";
-import {View, Text, TouchableOpacity} from "react-native";
+import {View, Text, TouchableOpacity, Alert} from "react-native";
 import {EmployerVacancies} from "../../../types/employer";
 import {COLORS} from "../../../constants";
 import {useRouter} from "expo-router";
 import {request} from "../../../utils";
+import {POST} from "../../../constants/requests";
 
 interface Props {
     data: EmployerVacancies
@@ -17,15 +18,24 @@ const EmployerVacancyElement: FC<Props> = ({data}) => {
     }
 
     const editHandler = (): void => {
-        router.push('')
+        // router.push('')
 
         //TODO
     }
 
     const closeHandler = (): void => {
-        // request()
-
-        //TODO
+        request(POST, `vacancies/close/${data.id}`)
+            .then((res) => {
+                if (res.status !== 200) {
+                    throw new Error('Помилка. Спробуйте ще раз.')
+                } else {
+                    Alert.alert('Успіх!')
+                }
+            })
+            .catch((error) => {
+                Alert.alert(error.message)
+                console.log(error)
+            })
     }
 
     return (
@@ -64,7 +74,10 @@ const EmployerVacancyElement: FC<Props> = ({data}) => {
             >
                 <ElementButton onPress={infoHandler} text={'Відгуки'}/>
                 <ElementButton onPress={editHandler} text={'Редагувати'}/>
-                {data.available && <ElementButton onPress={closeHandler} text={'Закрити'}/>}
+                {data.available
+                    ? <ElementButton onPress={closeHandler} text={'Закрити'}/>
+                    : <ElementButton onPress={() => {}} color={COLORS.gray} text={''}/>
+                }
 
             </View>
 
@@ -85,7 +98,6 @@ const ElementButton: FC<ElementButtonProps> = ({onPress, text, color}) => {
         <TouchableOpacity
             style={{
                 paddingVertical: 4,
-                // paddingHorizontal: 10,
                 backgroundColor: color ?? COLORS.primary,
                 borderRadius: 10,
                 width: '32%'

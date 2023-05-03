@@ -36,8 +36,9 @@ const SearchCard: FC<Props> = ({data}) => {
     }
 
     return (
-        <TouchableOpacity style={styles.element}
-                          onPress={() => router.push(`/vacancies/${id}`)}
+        <TouchableOpacity
+            style={styles.element}
+            onPress={() => router.push(`/vacancies/${id}`)}
         >
             <View style={styles.row}>
                 <Text style={styles.title}>{title}</Text>

@@ -1,31 +1,44 @@
 const {Schema, model} = require("mongoose")
-const {ApplicationModel, CategoryModel, EmploymentTypeModel, ResumeModel, TagModel, WorkerModel, VacancyModel} = require("../constansts/models")
+const {ApplicationModel, CategoryModel, EmploymentTypeModel, ResumeModel, TagModel, WorkerModel, VacancyModel, UserModel} = require("../constansts/models")
 
 const WorkerSchema = new Schema({
     resumes: {
         type: [Schema.Types.ObjectId],
-        ref: ResumeModel
+        ref: ResumeModel,
+        default: []
     },
     applications: {
         type: [Schema.Types.ObjectId],
-        ref: ApplicationModel
+        ref: ApplicationModel,
+        default: []
     },
     employmentTypes: {
         type: [Schema.Types.ObjectId],
-        ref: EmploymentTypeModel
+        ref: EmploymentTypeModel,
+        default: []
     },
     categories: {
         type: [Schema.Types.ObjectId],
-        ref: CategoryModel
+        ref: CategoryModel,
+        default: []
     },
     saved: {
         type: [Schema.Types.ObjectId],
-        ref: VacancyModel
+        ref: VacancyModel,
+        default: []
     },
     tags: {
         type: [Schema.Types.ObjectId],
-        ref: TagModel
+        ref: TagModel,
+        default: []
     }
+})
+
+WorkerSchema.virtual('user', {
+    ref: UserModel,
+    localField: '_id',
+    foreignField: 'worker',
+    justOne: true
 })
 
 WorkerSchema.set('toJSON', {

@@ -114,7 +114,7 @@ const JobDetails: FC = () => {
                             </View>
                 }
             </ScrollView>
-            {zustandData?.role === WORKER && <JobFooter/>}
+            {zustandData?.role === WORKER && <JobFooter available={data.available}/>}
 
         </SafeAreaView>
     );

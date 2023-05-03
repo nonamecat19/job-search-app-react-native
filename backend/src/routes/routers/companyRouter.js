@@ -4,6 +4,8 @@ const Application = require("../../models/application")
 const Vacancy = require("../../models/vacancy")
 const express = require("express")
 const {Error} = require("mongoose");
+const {COMPANY} = require("../../constansts/roles");
+const auth = require("../../middleware/auth");
 
 const router = express.Router()
 
@@ -18,6 +20,38 @@ router.get("/", async (req, res) => {
         res.status(200).send(users)
     } catch (error) {
         res.status(500).send(error)
+    }
+})
+
+router.get("/me", auth(COMPANY), async (req, res) => {
+    try {
+        const companies = await Company
+            .findById(req.user.company)
+            .populate({
+                path: 'vacancies'
+            })
+        res.send(companies.vacancies)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+
+})
+
+router.get('/vacancies', auth(COMPANY), async (req, res) => {
+    try {
+        const users = await Company
+            .findById(req.user.company)
+            .populate({
+                path: 'vacancies',
+                select: 'title location available'
+            })
+
+        if (!users.vacancies?.length) {
+            throw new Error('This company have no vacancies!')
+        }
+        res.status(200).send(users.vacancies)
+    } catch (error) {
+        res.status(500).send(error.message)
     }
 })
 
@@ -44,18 +78,7 @@ router.patch("/:id", async (req, res) => {
     }
 })
 
-router.get('/:id/vacancies', async (req, res) => {
-    try {
-        const users = await Company
-            .findById(req.params.id)
-        if (!users.vacancies?.length) {
-            throw new Error('This company have no vacancies!')
-        }
-        res.status(200).send(users.vacancies)
-    } catch (error) {
-        res.status(500).send(error.message)
-    }
-})
+
 
 router.post("/", async (req, res) => {
     if (!req.body) {
@@ -68,8 +91,6 @@ router.post("/", async (req, res) => {
     const newCompany = new Company(companyData)
 
     userData.role = "employer"
-    userData.admin = null
-    userData.worker = null
     userData.company = newCompany._id
 
     const newUser = new User(userData)

@@ -83,7 +83,8 @@ const Login: FC<Props> = () => {
                 await updateData()
                 router.push('/home')
             } catch (error) {
-                Alert.alert(error.message)
+                Alert.alert('Перевірте правильність даних!')
+                console.log(error.message)
             }
         }
     }

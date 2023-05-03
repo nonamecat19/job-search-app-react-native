@@ -1,36 +1,50 @@
 const Vacancy = require("../../models/vacancy")
 const express = require("express")
 const Company = require("../../models/company");
+const Category = require("../../models/category");
+const auth = require("../../middleware/auth");
+const {COMPANY} = require("../../constansts/roles");
 
 const router = express.Router()
 
 router.get("/", async (req, res) => {
     try {
         const vacancies = await Vacancy
-            .find({})
+            .find(req.query)
             .populate({
                 path: 'company',
-                select: 'name'
+                select: 'name logo'
             })
-            .populate('categories employmentTypes tags')
+            .populate('category employmentType tags')
         res.status(200).json(vacancies)
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).send(error.message)
     }
 })
 
-router.get("/:id", async (req, res) => {
+router.get("/recommendations", async (req, res) => {
     try {
-        const vacancy = await Vacancy
-            .findById(req.params.id)
-            .populate({
-                path: 'company',
-                select: 'name'
+        Category
+            .find()
+            .then(categories => {
+                const promises = categories.map(category => {
+                    return Vacancy
+                        .find({
+                            category: category._id
+                        })
+                        .select('-description -requirements -offers -date -tags -available')
+                        .populate('category')
+                        .populate({path: 'company', select: 'name logo'})
+                        .limit(5)
+                        .exec()
+                })
+                return Promise.all(promises)
             })
-            .populate('categories employmentTypes tags')
-        res.status(200).json(vacancy)
+            .then(data => {
+                res.status(200).json(data)
+            })
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).send(error.message)
     }
 })
 
@@ -38,7 +52,9 @@ router.get("/:id", async (req, res) => {
 router.get("/search", async (req, res) => {
     try {
         const query = req.query
-        const filter = {}
+        const filter = {
+            available: true
+        }
 
         if (query.minSalary) {
             filter.minSalary = {
@@ -61,17 +77,44 @@ router.get("/search", async (req, res) => {
             .find(filter)
             .populate({
                 path: 'company',
-                select: 'name'
+                select: 'name logo'
             })
-            .populate('categories employmentTypes tags')
+            .select('-description -requirements -offers -category -available -tags')
         res.status(200).send(vacancies)
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).send(error.message)
     }
 })
 
+router.post("/close/:id", auth(COMPANY), async (req, res) => {
+    try {
+        const id = req.params.id
+        const vacancy = await Vacancy.findById(id)
+        const userCompany = req.user.company
+        vacancy.available = false
+        await vacancy.save()
+        res.status(200).send()
+    } catch (error) {
+        res.status(403).send(error.message)
+    }
+})
 
-router.post("/", async (req, res) => {
+router.get("/:id", async (req, res) => {
+    try {
+        const vacancy = await Vacancy
+            .findById(req.params.id)
+            .populate({
+                path: 'company',
+                select: 'name logo'
+            })
+            .populate('category employmentType tags')
+        res.status(200).json(vacancy)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+})
+
+router.post("/", auth(COMPANY), async (req, res) => {
     if (!req.body) {
         res.status(400).send()
     }
@@ -79,6 +122,8 @@ router.post("/", async (req, res) => {
     let vacancyData = req.body
 
     vacancyData.date = new Date()
+    vacancyData.company = req.user.company
+
     const newVacancy = new Vacancy(vacancyData)
 
     try {

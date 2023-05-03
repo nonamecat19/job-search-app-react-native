@@ -1,4 +1,5 @@
 const EmploymentType = require("../../models/employmentType")
+const Vacancy = require("../../models/vacancy")
 const express = require("express")
 
 const router = express.Router()
@@ -25,8 +26,16 @@ router.post("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
     try {
-        await EmploymentType.findByIdAndRemove(req.params.id)
-        res.status(200).send()
+        const id = req.params.id
+        const employmentTypes = await Vacancy.find({employmentType: id})
+        if (employmentTypes.length === 0) {
+            await EmploymentType.findByIdAndRemove(id)
+            res.status(200).send()
+        } else {
+            throw new Error('Видалення неможливе')
+        }
+
+
     } catch (error) {
         res.status(400).send(error.message)
     }

@@ -22,7 +22,6 @@ const Profile: FC = () => {
         <ScreenTemplate>
             <MenuItem name={'Створити вакансію'} path={'employer/add'}/>
             <MenuItem name={'Мої вакансії'} path={'employer/vacancies'}/>
-            <MenuItem name={'Мої відгуки'} path={'employer/applications'}/>
             <MenuItem name={'Налаштування'} path={'employer/settings'}/>
             <MenuItem name={'Вийти'} func={logoutHandler}/>
         </ScreenTemplate>
