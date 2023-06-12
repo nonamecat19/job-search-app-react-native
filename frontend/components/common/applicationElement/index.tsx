@@ -1,11 +1,11 @@
 import {ApplicationFetchData} from "../../../types/applications";
 import React, {FC} from "react";
-import {Alert, Text, TouchableOpacity, View} from "react-native";
+import {Alert, Linking, Text, TouchableOpacity, View} from "react-native";
 import moment from "moment";
 import styles from './applicationElement.style'
 import {COLORS} from "../../../constants";
 import {request} from "../../../utils";
-import {PATCH} from "../../../constants/requests";
+import {GET, PATCH} from "../../../constants/requests";
 
 
 interface ApplicationElementProps {
@@ -41,12 +41,19 @@ const ApplicationElement: FC<ApplicationElementProps> = ({data, refetch}) => {
     }
 
     const checkResumeHandler = (): void => {
-        request(PATCH, `applications/check/${data.id}`)
-            .then(() => {
-                Alert.alert('Успіх!')
-                refetch()
+        request(GET, `resumes/${data.resume}`)
+            .then((res) => {
+                console.log(res)
+                Linking.openURL(res.data)
+                    .then(() => {
+                        request(PATCH, `applications/check/${data.id}`)
+                            .then(() => {
+                                Alert.alert('Успіх!')
+                                refetch()
+                            })
+                            .catch((error) => Alert.alert('Помилка! ' + error.message))
+                    })
             })
-            .catch((error) => Alert.alert('Помилка! ' + error.message))
     }
 
     return (
@@ -70,7 +77,12 @@ const ApplicationElement: FC<ApplicationElementProps> = ({data, refetch}) => {
             <View style={styles.row}>
                 <Button onPress={submitHandler} text={'Підтвердити'}/>
                 <Button onPress={rejectHandler} text={'Відмовити'}/>
-                <Button onPress={checkResumeHandler} text={'Резюме'}/>
+                {
+                    data.resume
+                        ? <Button onPress={checkResumeHandler} text={'Резюме'}/>
+                        : <Button onPress={() => {
+                        }} text={'-'}/>
+                }
             </View>
         </View>
     )

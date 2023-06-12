@@ -43,19 +43,13 @@ router.post("/add", auth(WORKER), upload, async (req, res) => {
     }
 })
 
-// router.get("/download/:id", async (req, res) => {
-//
-//     let fileName = req.params.id
-//
-//     let filePath = uploadDirectory + fileName
-//     const newFileName = fileName + '.pdf'
-//
-//     try {
-//         res.status(200).download(filePath, newFileName)
-//     } catch ({message}) {
-//
-//     }
-// })
-//
+router.get('/:id', auth(), async (req, res) => {
+    try {
+        const resume = await Resume.findById(req.params.id)
+        res.send(resume.downloadURL)
+    } catch (error) {
+        res.status(404).send(error.message)
+    }
+})
 
 module.exports = router

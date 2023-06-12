@@ -33,4 +33,5 @@ export type ApplicationFetchData = {
     date: Date
     status: string
     id: string
+    resume?: any
 }

@@ -11,16 +11,13 @@ import {
 
 import {
     About,
-    JobFooter,
     JobTabs,
     ScreenHeaderBtn,
-    Specifics,
 } from "../../components"
 import {COLORS, icons, SIZES} from "../../constants"
 import useFetch from "../../hook/useFetch"
 import {GET} from "../../constants/requests"
 import {FC} from "react"
-import Company from "../../components/jobdetails/company/Company"
 import VacancyContainer from "../../components/common/vacancyContainer";
 import styles from "../../components/jobdetails/company/company.style";
 import {checkImageURL} from "../../utils";

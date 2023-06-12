@@ -11,25 +11,30 @@ const AdminStats: FC = ({}) => {
 
     const {data, isLoading, error, refetch} = useFetch<StatElement[]>(GET, 'statistics')
 
+    const titles = [
+        'Останній запис',
+        'Статистика за останню годину',
+        'Статистика за останній день',
+        'Статистика за останній місяць',
+    ]
 
     return (
         <ScreenTemplate>
             <FetchDataTemplate isLoading={isLoading} refetch={refetch}>
                 {
-                    data.map(item => {
+                    data.map((item, index) => {
                         return (
-                            <MyStatElement data={item}/>
+                            <MyStatElement data={item} key={Math.random()} title={titles[index]} />
                         )
                     })
                 }
-
             </FetchDataTemplate>
         </ScreenTemplate>
     )
 }
 
 
-const MyStatElement = ({data}) => {
+const MyStatElement = ({data, title}) => {
 
     const labels: string[] = [
         'К-сть компаній',
@@ -66,7 +71,8 @@ const MyStatElement = ({data}) => {
                 fontSize: 18,
                 fontWeight: 'bold'
             }}>
-                Дата {date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()} {date.getHours()}:{date.getMinutes()}
+                {/*Дата {date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()} {date.getHours()}:{date.getMinutes()}*/}
+                {title}
             </Text>
             {
                 arrayData.map((item, index) => {
